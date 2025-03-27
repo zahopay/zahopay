@@ -22,6 +22,8 @@ export const AdminLogin = async (req, res) => {
   try {
     const admin = await AdminModel.findOne({ adminEmail });
 
+     console.log("admin : ", admin)
+
     if (!admin) {
       return res.status(401).json({
         success: false,
@@ -37,6 +39,8 @@ export const AdminLogin = async (req, res) => {
       });
     }
 
+     console.log("isMatch : ", isMatch)
+
     const token = jwt.sign(
       { id: admin._id, role: "admin" },
       process.env.JWT_SECRET,
@@ -44,6 +48,8 @@ export const AdminLogin = async (req, res) => {
         expiresIn: "8h",
       }
     );
+
+     console.log("token : ", token)
 
     // Ensure cookie configuration is correct
     res.cookie("admin_token", token, {
@@ -55,6 +61,8 @@ export const AdminLogin = async (req, res) => {
       path: "/",
       partitioned: true 
     });
+
+     console.log(res.cookie, "res.cookie")
 
     return res.status(200).json({
       success: true,
