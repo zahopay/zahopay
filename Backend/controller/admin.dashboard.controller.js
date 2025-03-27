@@ -47,7 +47,7 @@ export const AdminLogin = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 8 * 60 * 60 * 1000,
-      domain: process.env.COOKIE_DOMAIN || "localhost",
+      domain: '.onrender.com'
     });
 
     return res.status(200).json({
