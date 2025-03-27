@@ -43,9 +43,9 @@ export const register = async (req, res) => {
     res.cookie("accessid", token, {
       httpOnly: true,
       secure: true,
-      sameSite: none,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: '.onrender.com',
+      domain: '.render.com',
       path: '/',  
     });
 
@@ -97,9 +97,9 @@ export const login = async (req, res) => {
     res.cookie("accessid", token, {
       httpOnly: true,
       secure: true,
-      sameSite: none,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: '.onrender.com',
+      domain: '.render.com',
       path: '/',  
     });
 
@@ -118,9 +118,9 @@ export const logout = async (req, res) => {
     res.clearCookie("accessid", {
       httpOnly: true,
       secure: true,
-      sameSite: none,
+      sameSite: "none",
       maxAge: 0,
-      domain: '.onrender.com',
+      domain: '.render.com',
       path: '/',  
     });
 
