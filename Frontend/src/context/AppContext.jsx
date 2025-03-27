@@ -73,6 +73,7 @@ export const AppContextProvider = ({ children }) => {
       });
       setUserData(null);
       setIsLoggedin(false);
+      return false
     }
   };
 
