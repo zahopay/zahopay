@@ -24,25 +24,33 @@ const onFormSubmit = async (e) => {
     const { data } = await api.post(backendUrl + "/admin/auth/login", {
       adminEmail,
       adminPassword,
+    }, {
+      withCredentials: true // Ensure credentials are sent
     });
 
     if (data?.success) {
       // Store token in localStorage as fallback
       localStorage.setItem("admin_token", data.admin.token);
 
-      // Verify cookie was set
-      const hasCookie = await verifyAdminCookie();
-      if (!hasCookie) {
+      // Set default Authorization header
+      api.defaults.headers.common['Authorization'] = `Bearer ${data.admin.token}`;
+
+      // Verify authentication
+      try {
+        const verifyResponse = await api.get("/admin/auth/verify", {
+          withCredentials: true
+        });
+        
+        if (verifyResponse.data.success) {
+          // Successful login
+          navigate("/administrator/auth/dashboard");
+        } else {
+          throw new Error("Verification failed");
+        }
+      } catch (verifyError) {
+        console.error("Verification error:", verifyError);
         throw new Error("Cookie authentication failed");
       }
-
-      // Proceed with login
-      setAdminAuthState({
-        isLoggedin: true,
-        adminData: data.admin,
-        isLoading: false,
-      });
-      navigate("/administrator/auth/dashboard");
     }
   } catch (error) {
     console.error("Login error:", error);
