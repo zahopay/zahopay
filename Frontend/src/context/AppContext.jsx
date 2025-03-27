@@ -30,6 +30,14 @@ export const AppContextProvider = ({ children }) => {
     isLoading: true,
   });
 
+    const api = axios.create({
+    baseURL: import.meta.env.VITE_BACKEND_URL,
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
 
 
   const verifyAuth = async () => {
@@ -85,46 +93,52 @@ export const AppContextProvider = ({ children }) => {
     };
 
 
-   const verifyAdmin = async () => {
-     try {
-       const { data } = await axios.get(`${backendUrl}/admin/auth/verify`, {
-         withCredentials: true,
-         headers: {
-           Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
-         },
-       });
+const verifyAdmin = async () => {
+  // Only run verification on admin routes
+  if (!window.location.pathname.startsWith("/administrator")) {
+    return;
+  }
 
-       if (data.success) {
-         setAdminAuthState({
-           isLoggedin: true,
-           adminData: data.admin,
-           isLoading: false,
-         });
-         // Store token in localStorage as fallback
-         if (data.admin?.token) {
-           localStorage.setItem("admin_token", data.admin.token);
-         }
-       } else {
-         throw new Error(data.message || "Admin verification failed");
-       }
-     } catch (error) {
-       setAdminAuthState({
-         isLoggedin: false,
-         adminData: null,
-         isLoading: false,
-       });
-       console.error("Admin verification error:", error);
-     }
-   };
+  try {
+    const { data } = await axios.get(`${backendUrl}/admin/auth/verify`, {
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+      },
+    });
 
-   useEffect(() => {
-     verifyAdmin();
-   }, []);
+    if (data.success) {
+      setAdminAuthState({
+        isLoggedin: true,
+        adminData: data.admin,
+        isLoading: false,
+      });
+      if (data.admin?.token) {
+        localStorage.setItem("admin_token", data.admin.token);
+      }
+    } else {
+      throw new Error(data.message || "Admin verification failed");
+    }
+  } catch (error) {
+    setAdminAuthState({
+      isLoggedin: false,
+      adminData: null,
+      isLoading: false,
+    });
+    // Only log errors if we're actually on an admin route
+    if (window.location.pathname.startsWith("/administrator")) {
+      console.error("Admin verification error:", error);
+    }
+  }
+};
+  
 
-
-
- 
-
+useEffect(() => {
+  // Only verify admin status if on admin route
+  if (window.location.pathname.startsWith("/administrator")) {
+    verifyAdmin();
+  }
+}, []);
 
 
   useEffect(() => {
@@ -136,7 +150,7 @@ export const AppContextProvider = ({ children }) => {
     axios.defaults.baseURL = backendUrl;
 
     // Add response interceptor
-    axios.interceptors.response.use(
+   axios.interceptors.response.use(
      (response) => response,
      (error) => {
        if (error.response?.status === 401) {
@@ -159,8 +173,6 @@ export const AppContextProvider = ({ children }) => {
        return Promise.reject(error);
      }
    );
-
-    verifyAuth();
   }, []);
 
   // logout
@@ -217,6 +229,7 @@ export const AppContextProvider = ({ children }) => {
     adminAuthState,
     setAdminAuthState,
     frontendUrl,
+    api,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
