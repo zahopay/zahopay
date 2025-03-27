@@ -45,8 +45,9 @@ export const register = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: '.render.com',
-      path: '/',  
+      domain: ".zahopay.onrender.com",
+      path: "/",
+      partitioned: true 
     });
 
     //sending mail otp
@@ -99,8 +100,9 @@ export const login = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: '.render.com',
-      path: '/',  
+      domain: ".zahopay.onrender.com",
+      path: "/",
+      partitioned: true 
     });
 
     return res.json({
@@ -120,8 +122,9 @@ export const logout = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 0,
-      domain: '.render.com',
-      path: '/',  
+      domain: ".zahopay.onrender.com",
+      path: "/",
+      partitioned: true 
     });
 
     return res.json({ success: true, message: "Logged Out" });
