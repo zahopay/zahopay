@@ -47,7 +47,6 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: ".zahopay.onrender.com",
       path: "/",
-      partitioned: true 
     });
 
     //sending mail otp
@@ -102,7 +101,6 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: ".zahopay.onrender.com",
       path: "/",
-      partitioned: true 
     });
 
     return res.json({
@@ -124,7 +122,6 @@ export const logout = async (req, res) => {
       maxAge: 0,
       domain: ".zahopay.onrender.com",
       path: "/",
-      partitioned: true 
     });
 
     return res.json({ success: true, message: "Logged Out" });
