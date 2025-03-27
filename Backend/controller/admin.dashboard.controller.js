@@ -43,11 +43,12 @@ export const AdminLogin = async (req, res) => {
 
     // Ensure cookie configuration is correct
     res.cookie("adminId", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 8 * 60 * 60 * 1000,
-      domain: '.onrender.com'
+       httpOnly: true,
+      secure: true,
+      sameSite: none,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      domain: '.onrender.com',
+      path: '/',  
     });
 
     return res.status(200).json({
