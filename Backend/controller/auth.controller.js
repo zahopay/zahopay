@@ -103,6 +103,14 @@ export const login = async (req, res) => {
       path: "/",
     });
 
+    console.log('Setting cookie with options:', {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  path: "/"
+});
+
     return res.json({
       success: true,
       message: "Login Successful",
