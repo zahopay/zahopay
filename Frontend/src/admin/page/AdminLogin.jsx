@@ -31,11 +31,17 @@ const onFormSubmit = async (e) => {
     console.log(data)
 
     if (data?.success) {
+
+       sessionStorage.setItem('admin_session_token', data.admin.token);
       // Store token in localStorage as fallback
       localStorage.setItem("admin_token", data.admin.token);
 
       // Set default Authorization header
       api.defaults.headers.common['Authorization'] = `Bearer ${data.admin.token}`;
+
+       
+  
+  // 2. Set default auth header
 
       // Verify authentication
       try {
