@@ -50,6 +50,12 @@ const onFormSubmit = async (e) => {
         });
 
         console.log(verifyResponse + "verifyResponse")
+
+        const testCookie = () => {
+  document.cookie = "test_cookie=value; path=/; domain=.zahopay.onrender.com";
+  console.log("Test cookie set:", document.cookie);
+};
+
         
         if (verifyResponse.data.success) {
           // Successful login
