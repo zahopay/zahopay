@@ -9,7 +9,7 @@ const AdminLogin = () => {
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
 
-  const { backendUrl, setAdminAuthState } =
+  const { backendUrl, setAdminAuthState, api } =
     useContext(AppContext);
 
   const navigate = useNavigate();
@@ -21,43 +21,44 @@ const onFormSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const { data } = await axios.post(
-      `${backendUrl}/admin/auth/login`,
-      { adminEmail, adminPassword },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const { data } = await api.post(backendUrl + "/admin/auth/login", {
+      adminEmail,
+      adminPassword,
+    });
 
     if (data?.success) {
       // Store token in localStorage as fallback
-      if (data.admin?.token) {
-        localStorage.setItem('admin_token', data.admin.token);
+      localStorage.setItem("admin_token", data.admin.token);
+
+      // Verify cookie was set
+      const hasCookie = await verifyAdminCookie();
+      if (!hasCookie) {
+        throw new Error("Cookie authentication failed");
       }
-      
+
+      // Proceed with login
       setAdminAuthState({
         isLoggedin: true,
         adminData: data.admin,
         isLoading: false,
       });
-      
-      // Set default Authorization header for future requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${data.admin.token}`;
-      
       navigate("/administrator/auth/dashboard");
-    } else {
-      throw new Error(data?.message || "Authentication failed");
     }
   } catch (error) {
     console.error("Login error:", error);
-    toast.error(
-      error.response?.data?.message ||
-      error.message ||
-      "Login failed. Please check your credentials and try again."
-    );
+    toast.error(error.response?.data?.message || "Login failed");
+  }
+};
+
+
+
+// Helper function to verify cookie
+const verifyAdminCookie = async () => {
+  try {
+    const response = await api.get("/admin/auth/verify");
+    return response.data.success;
+  } catch {
+    return false;
   }
 };
 
