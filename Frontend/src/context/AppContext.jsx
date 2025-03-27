@@ -8,7 +8,7 @@ const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
 
   const backendUrl = "https://zahopay.onrender.com"
-  const frontendUrl = import.meta.env.VITE_FRONTEND_URL || "http://localhost:5173";
+  const frontendUrl = "https://zahopay-frontend.onrender.com";
 
 
   const [isLoggedin, setIsLoggedin] = useState(false);
