@@ -52,7 +52,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(
   cors({
-    origin: allowOrigins,
+    origin: allowedOrigins,
     credentials: true,
     exposedHeaders: ["set-cookie"],
   })
