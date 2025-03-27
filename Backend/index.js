@@ -29,6 +29,7 @@ const allowedOrigins = [
   'http://localhost:3000' // For local development
 ];
 
+// Corrected CORS middleware (using allowedOrigins)
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
