@@ -28,6 +28,8 @@ const onFormSubmit = async (e) => {
       withCredentials: true // Ensure credentials are sent
     });
 
+    console.log(data)
+
     if (data?.success) {
       // Store token in localStorage as fallback
       localStorage.setItem("admin_token", data.admin.token);
@@ -37,9 +39,11 @@ const onFormSubmit = async (e) => {
 
       // Verify authentication
       try {
-        const verifyResponse = await api.get("/admin/auth/verify", {
+        const verifyResponse = await api.get(backendUrl + "/admin/auth/verify", {
           withCredentials: true
         });
+
+        console.log(verifyResponse + "verifyResponse")
         
         if (verifyResponse.data.success) {
           // Successful login
