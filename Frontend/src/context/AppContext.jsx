@@ -89,19 +89,23 @@ export const AppContextProvider = ({ children }) => {
      try {
        const { data } = await axios.get(`${backendUrl}/admin/auth/verify`, {
          withCredentials: true,
+         headers: {
+           Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
+         },
        });
+
        if (data.success) {
          setAdminAuthState({
            isLoggedin: true,
            adminData: data.admin,
            isLoading: false,
          });
+         // Store token in localStorage as fallback
+         if (data.admin?.token) {
+           localStorage.setItem("admin_token", data.admin.token);
+         }
        } else {
-         setAdminAuthState({
-           isLoggedin: false,
-           adminData: null,
-           isLoading: false,
-         });
+         throw new Error(data.message || "Admin verification failed");
        }
      } catch (error) {
        setAdminAuthState({
@@ -109,6 +113,7 @@ export const AppContextProvider = ({ children }) => {
          adminData: null,
          isLoading: false,
        });
+       console.error("Admin verification error:", error);
      }
    };
 
@@ -132,18 +137,28 @@ export const AppContextProvider = ({ children }) => {
 
     // Add response interceptor
     axios.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response?.status === 401) {
-          setAuthState({
-            isLoggedin: false,
-            userData: null,
-            isLoading: false,
-          });
-        }
-        return Promise.reject(error);
-      }
-    );
+     (response) => response,
+     (error) => {
+       if (error.response?.status === 401) {
+         // Handle admin and user auth separately
+         if (error.config.url.includes("/admin/")) {
+           setAdminAuthState({
+             isLoggedin: false,
+             adminData: null,
+             isLoading: false,
+           });
+           localStorage.removeItem("admin_token");
+         } else {
+           setAuthState({
+             isLoggedin: false,
+             userData: null,
+             isLoading: false,
+           });
+         }
+       }
+       return Promise.reject(error);
+     }
+   );
 
     verifyAuth();
   }, []);
