@@ -54,6 +54,7 @@ export const AppContextProvider = ({ children }) => {
         });
         setUserData(data.userDetails);
         setIsLoggedin(true)
+        return true
       } else {
         setAuthState({
           isLoggedin: false,
@@ -62,7 +63,7 @@ export const AppContextProvider = ({ children }) => {
         });
         setIsLoggedin(false)
         setUserData(null);
-
+        return false
       }
     } catch (error) {
       setAuthState({
