@@ -28,7 +28,6 @@ const onFormSubmit = async (e) => {
       withCredentials: true // Ensure credentials are sent
     });
 
-    console.log(data)
 
     if (data?.success) {
 
@@ -48,13 +47,6 @@ const onFormSubmit = async (e) => {
         const verifyResponse = await api.get(backendUrl + "/admin/auth/verify", {
           withCredentials: true
         });
-
-        console.log(verifyResponse + "verifyResponse")
-
-        const testCookie = () => {
-  document.cookie = "test_cookie=value; path=/; domain=.zahopay.onrender.com";
-  console.log("Test cookie set:", document.cookie);
-};
 
         
         if (verifyResponse.data.success) {
