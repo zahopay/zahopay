@@ -24,7 +24,7 @@ const app = express()
 
 const port = process.env.PORT || 5040;
 
-const allowOrigins = ["http://localhost:5173"];
+const allowOrigins = ["https://zahopay-frontend.onrender.com"];
 
 connectDB();
 app.use(express.json())
