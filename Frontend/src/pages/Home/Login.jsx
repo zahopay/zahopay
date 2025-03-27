@@ -31,12 +31,13 @@ const Login = () => {
         withCredentials: true,
       });
 
-        if (data.success) {
-          toast.success(data.message);
-          setIsLoggedin(true);
-          await verifyAuth()
-          navigate("/user/dashboard");
-        } else {
+       if (data.success) {
+  toast.success(data.message);
+  const authVerified = await verifyAuth();
+  if (authVerified) {
+    navigate("/user/dashboard");
+  }
+} else {
           toast.error(data.message);
         }
       } catch (error) {
