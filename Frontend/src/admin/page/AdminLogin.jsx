@@ -67,7 +67,7 @@ const onFormSubmit = async (e) => {
 // Helper function to verify cookie
 const verifyAdminCookie = async () => {
   try {
-    const response = await api.get("/admin/auth/verify");
+    const response = await api.get( backendUrl + "/admin/auth/verify");
     return response.data.success;
   } catch {
     return false;
