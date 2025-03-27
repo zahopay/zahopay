@@ -10,7 +10,7 @@ import moment from "moment/moment.js";
 
 
 export const AdminLogin = async (req, res) => {
-  const { adminEmail, adminPassword } = req.body;
+   const { adminEmail, adminPassword } = req.body;
 
   if (!adminEmail || !adminPassword) {
     return res.status(400).json({
@@ -37,18 +37,22 @@ export const AdminLogin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
-      expiresIn: "8h",
-    });
+    const token = jwt.sign(
+      { id: admin._id, role: "admin" },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "8h",
+      }
+    );
 
     // Ensure cookie configuration is correct
-    res.cookie("adminId", token, {
-       httpOnly: true,
+    res.cookie("admin_token", token, {
+      httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: none,
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: '.render.com',
-      path: '/',  
+      domain: ".onrender.com",
+      path: "/",
     });
 
     return res.status(200).json({
@@ -82,7 +86,7 @@ export const verifyAdmin = async (req, res) => {
 };
 
 export const adminLogout = (req, res) => {
-  res.clearCookie("adminId", { path: "/" });
+    res.clearCookie("admin_token", { path: "/" });
   res.json({ success: true, message: "Logged out" });
 };
 
