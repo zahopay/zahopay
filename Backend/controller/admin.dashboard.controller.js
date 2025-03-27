@@ -53,6 +53,7 @@ export const AdminLogin = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: ".render.com",
       path: "/",
+      partitioned: true 
     });
 
     return res.status(200).json({
