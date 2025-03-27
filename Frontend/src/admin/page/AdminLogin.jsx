@@ -28,29 +28,37 @@ const onFormSubmit = async (e) => {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
       }
     );
 
     if (data?.success) {
+      // Store token in localStorage as fallback
+      if (data.admin?.token) {
+        localStorage.setItem('admin_token', data.admin.token);
+      }
+      
       setAdminAuthState({
         isLoggedin: true,
         adminData: data.admin,
         isLoading: false,
       });
+      
+      // Set default Authorization header for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${data.admin.token}`;
+      
       navigate("/administrator/auth/dashboard");
     } else {
-      toast.error(data?.message || "Authentication failed");
+      throw new Error(data?.message || "Authentication failed");
     }
   } catch (error) {
     console.error("Login error:", error);
     toast.error(
       error.response?.data?.message ||
-        error.message ||
-        "Login failed. Please check your credentials and try again."
+      error.message ||
+      "Login failed. Please check your credentials and try again."
     );
-  } 
+  }
 };
 
   return (
