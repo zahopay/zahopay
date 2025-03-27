@@ -1,0 +1,13 @@
+# Environment
+.env
+.env.*
+.env.local
+
+# Dependencies
+/node_modules/
+
+# User uploads
+/uploads/
+
+# OS metadata
+.DS_Store
