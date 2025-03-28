@@ -10,6 +10,7 @@ import bhimUpiPaymentForm from "./bhim-upi-payment-form.png"
 import bhmiArrow from "./bhim-arrow.png"
 import zahoPayLogo from "./zahopay_logo.png"
 import heroHomeImage from "./hero-image-home.png"
+import zahopay_favicon from "./zahopay_favicon.png"
 
 
 const assets = {
@@ -25,6 +26,7 @@ const assets = {
   bhmiArrow,
   zahoPayLogo,
   heroHomeImage,
+  zahopay_favicon,
 };
 
 
