@@ -30,7 +30,10 @@ const UserPlan = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    const fetchuserKYCDetails = async () => {
+    fetchuserKYCDetails();
+  }, []);
+
+  const fetchuserKYCDetails = async () => {
       try {
         axios.defaults.withCredentials = true;
         const { data } = await axios.get(
@@ -44,9 +47,6 @@ const UserPlan = () => {
         toast.error(error.message);
       }
     };
-
-    fetchuserKYCDetails();
-  }, []);
 
   const handleKycSubmit = async (kycData) => {
     try {
