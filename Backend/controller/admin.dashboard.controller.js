@@ -176,7 +176,7 @@ export const getAllIndividualuserProducts = async(req, res) => {
     }
 
     const allUserProducts = await paymentFormModel.aggregate([
-      { $match: { userId : userId } },
+      { $match: { userId : new mongoose.Types.ObjectId(userId) } },
       { $sort: { createdAt: -1 } },
     ]);
 
