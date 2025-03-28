@@ -21,6 +21,7 @@ const AdminAllUsers = () => {
     const [allOrdersIsOpen, setAllOrdersIsOpen] = useState(false);
     const [userProfileIsOpen, setUserProfileIsOpen] = useState(false);
     const [userPlanHistoryIsOpen, setUserPlanHistoryIsOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
 
   useEffect(() => {
@@ -115,7 +116,9 @@ const AdminAllUsers = () => {
                     <div className="mt-3 flex flex-wrap justify-between items-center">
                       {/* all product Button to open modal */}
                       <button
-                        onClick={() => setAllProductIsOpen(true)}
+                        onClick={() => {setAllProductIsOpen(true) 
+                                       setSelectedUser(user)}
+                        }
                         className="px-5 py-2 rounded-3xl border-2 shadow transition-all duration-300 
                         bg-green-500 text-white border-gray-200 hover:bg-green-300"
                       >
@@ -132,7 +135,9 @@ const AdminAllUsers = () => {
                       </button>
 
                       <button
-                        onClick={() => setUserProfileIsOpen(true)}
+                        onClick={() => {setUserProfileIsOpen(true)
+                                       setSelectedUser(user)}
+                        }
                         className="px-5 py-2 rounded-3xl border-2 shadow transition-all duration-300 
                   bg-green-500 text-white border-gray-200 hover:bg-green-300"
                       >
@@ -140,7 +145,9 @@ const AdminAllUsers = () => {
                       </button>
 
                       <button
-                        onClick={() => setUserPlanHistoryIsOpen(true)}
+                        onClick={() => {setUserPlanHistoryIsOpen(true)
+                                       setSelectedUser(user)}
+                        }
                         className="px-5 py-2 rounded-3xl border-2 shadow transition-all duration-300 
                   bg-green-500 text-white border-gray-200 hover:bg-green-300"
                       >
@@ -153,7 +160,7 @@ const AdminAllUsers = () => {
                             {/* Close Button */}
                             <AllUserProducts
                               setAllProductIsOpen={setAllProductIsOpen}
-                              currentUser={user}
+                              currentUser={selectedUser}
                             />
                           </div>
                         </div>
@@ -165,7 +172,7 @@ const AdminAllUsers = () => {
                             {/* Close Button */}
                             <AllUserProfile
                               setUserProfileIsOpen={setUserProfileIsOpen}
-                              currentUser={user}
+                              currentUser={selectedUser}
                             />
                           </div>
                         </div>
@@ -179,7 +186,7 @@ const AdminAllUsers = () => {
                               setUserPlanHistoryIsOpen={
                                 setUserPlanHistoryIsOpen
                               }
-                              currentUser={user}
+                              currentUser={selectedUser}
                             />
                           </div>
                         </div>
