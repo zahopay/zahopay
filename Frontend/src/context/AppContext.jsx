@@ -207,7 +207,6 @@ useEffect(() => {
       );
 
       if (data.success) {
-        navigate("/verify-account");
         toast.success(data.message);
         return true
       } else {
