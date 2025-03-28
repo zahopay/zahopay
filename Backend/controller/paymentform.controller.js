@@ -26,8 +26,8 @@ export const addNewPaymentForm = async (req, res) => {
     const protocol = req.protocol;
 
     const logoImage = req.file
-      ? `${protocol}://${host}/${req.file.path.replace(/\\/g, "/")}`
-      : null;
+    ? `${protocol}://${host}/uploads/${req.file.path.replace(/^\/mnt\/uploads[\\/]/, "")}`
+    : null;
 
     const newPaymentForm = new paymentModel({
       title,
