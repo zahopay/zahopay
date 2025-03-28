@@ -160,7 +160,7 @@ export const sendVerifyOtp = async (req, res) => {
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: user.email,
-      subject: "OTP from EaseBizzy ",
+      subject: "OTP from ZahoPay ",
       text: `Your OTP is ${otp}. Verify your accout using this OTP`,
     };
 
@@ -285,7 +285,7 @@ export const sendRestOtp = async (req, res) => {
     const mailOptions = {
       from: process.env.SENDER_EMAIL,
       to: user.email,
-      subject: "Password Reset OTP from EaseBizzy ",
+      subject: "Password Reset OTP from ZahoPay ",
       text: `Your OTP for reset your password is ${otp}. Reset your password using this OTP`,
     };
 
