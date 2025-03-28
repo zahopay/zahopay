@@ -45,13 +45,14 @@ export const storage = multer.diskStorage({
 
     cb(null, uploadPath);
   },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    const filename = `${uniqueSuffix}${ext}`;
-    console.log("Saving file as:", filename);
-    cb(null, filename);
-  },
+// In your multer configuration
+filename: (req, file, cb) => {
+  const ext = path.extname(file.originalname);
+
+  const cleanName = file.originalname.replace(/^.*[\\\/]/, ''); 
+  const filename = `${Date.now()}-${cleanName}`;
+  cb(null, filename);
+}
 });
 
 export const upload = multer({
