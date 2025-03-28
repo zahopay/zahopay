@@ -209,11 +209,14 @@ useEffect(() => {
       if (data.success) {
         navigate("/verify-account");
         toast.success(data.message);
+        return true
       } else {
         toast.error(data.message);
+        return false
       }
     } catch (error) {
       toast.error(error.message);
+      return false
     }
   };
 
