@@ -31,8 +31,9 @@ const Register = () => {
       if (data.success) {
         toast.success(data.message);
         setIsLoggedin(true);
-        await sendVerificationOtp();
+        If(sendVerificationOtp()){
         navigate("/verify-account");
+        }
       } else {
         toast.error(data.message);
       }
