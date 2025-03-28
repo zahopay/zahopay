@@ -41,8 +41,8 @@ export const handleUserPlanSumbit = async(req, res) => {
         const protocol = req.protocol;
 
         const paymentScreenshot = req.file
-          ? `${protocol}://${host}/${req.file.path.replace(/\\/g, "/")}`
-          : null;
+    ? `${protocol}://${host}/uploads/${req.file.path.replace(/^\/mnt\/uploads[\\/]/, "")}`
+    : null;
 
 
         if(!paymentScreenshot){
