@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const VerifyAccount = () => {
-  const { isLoggedin, setIsLoggedin, backendUrl, getUserData, userData } =
+  const { isLoggedin, setIsLoggedin, backendUrl, userData } =
     useContext(AppContext);
 
   const navigate = useNavigate();
@@ -50,7 +50,6 @@ const VerifyAccount = () => {
 
       if (data.success) {
         toast.success(data.message);
-        getUserData();
         navigate("/login");
       } else {
         toast.error(data.message);
