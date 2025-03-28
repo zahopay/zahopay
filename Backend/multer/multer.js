@@ -1,53 +1,60 @@
 import multer from "multer";
 import fs from "fs";
+import path from "path";
+
+// Base path for uploads (uses Render's persistent disk in production)
+const getBaseUploadPath = () => {
+  return process.env.NODE_ENV === 'production' 
+    ? '/mnt/uploads' 
+    : path.join(process.cwd(), 'uploads');
+};
 
 export const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      console.log("Processing file:", file.fieldname);
-    let uploadPath = "uploads/";
+    console.log("Processing file:", file.fieldname);
+    const basePath = getBaseUploadPath();
+    let uploadPath = basePath;
 
+    // Determine subdirectory based on file type
     if (file.fieldname === "logoImage") {
-      uploadPath = `uploads/paymentform/logo`;
+      uploadPath = path.join(basePath, 'paymentform/logo');
     } 
-
-    if(file.fieldname === "paymentScreenshot"){
-      uploadPath = `uploads/paymentscreenshot`
+    else if (file.fieldname === "paymentScreenshot") {
+      uploadPath = path.join(basePath, 'paymentscreenshot');
+    }
+    else if (file.fieldname === "aadharFrontImage") {
+      uploadPath = path.join(basePath, 'kyc/aadharfront');
+    }
+    else if (file.fieldname === "aadharBackImage") {
+      uploadPath = path.join(basePath, 'kyc/aadharBack');
+    }
+    else if (file.fieldname === "panImage") {
+      uploadPath = path.join(basePath, 'kyc/pan');
+    }
+    else if (file.fieldname === "planPaymentScreenshot") {
+      uploadPath = path.join(basePath, 'plan/screenshot');
     }
 
-    if(file.fieldname === "aadharFrontImage"){
-      uploadPath = `uploads/kyc/aadharfront`
-    }
+    console.log("Final upload path:", uploadPath);
 
-    if (file.fieldname === "aadharBackImage") {
-      uploadPath = `uploads/kyc/aadharBack`;
-    }
-
-    if (file.fieldname === "panImage") {
-      uploadPath = `uploads/kyc/pan`;
-    }
-
-    if (file.fieldname === "planPaymentScreenshot") {
-      uploadPath = `uploads/plan/screenshot`;
-    }
-
+    // Create directory if it doesn't exist
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
+      console.log("Created directory:", uploadPath);
     }
 
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    const filename = Date.now() + "-" + file.originalname;
-    console.log("Saving file as:", filename); 
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    const filename = `${uniqueSuffix}${ext}`;
+    console.log("Saving file as:", filename);
     cb(null, filename);
   },
 });
 
-
-
 export const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, 
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
-
-
