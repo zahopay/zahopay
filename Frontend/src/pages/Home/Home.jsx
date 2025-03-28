@@ -569,8 +569,6 @@ const Home = () => {
               <h3 className="text-lg font-semibold mb-4">Contact</h3>
               <ul className="space-y-2">
                 <li className="text-gray-400">support@zahopay.com</li>
-                <li className="text-gray-400">+91 9876543210</li>
-                <li className="text-gray-400">Bangalore, India</li>
               </ul>
             </div>
           </div>
