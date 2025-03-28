@@ -62,7 +62,8 @@ app.options("*", cors());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-app.use("/uploads", express.static(join(__dirname, '/mnt/uploads')));
+app.use("/uploads", express.static('/mnt/uploads'));
+
 
 
 
