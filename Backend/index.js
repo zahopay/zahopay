@@ -26,6 +26,7 @@ const port = process.env.PORT || 5040;
 
 const allowedOrigins = [
   'https://zahopay-frontend.onrender.com',
+  'https://zahopay.in'
 ];
 
 // Corrected CORS middleware (using allowedOrigins)
