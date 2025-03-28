@@ -34,8 +34,6 @@ const Register = () => {
         if (sendVerificationOtp()) {
         navigate("/verify-account");
         }
-
-        }
       } else {
         toast.error(data.message);
       }
