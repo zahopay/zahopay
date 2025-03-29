@@ -20,50 +20,63 @@ const AdminLogin = () => {
 
   const onFormSubmit = async (e) => {
   e.preventDefault();
-  
+  console.log('Login form submitted'); // Debug log
+
   try {
     // 1. Clear existing cookies
     document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    
+    console.log('Cookies cleared'); // Debug log
+
     // 2. Make login request
+    console.log('Making login request...'); // Debug log
     const { data } = await api.post('/admin/auth/login', {
       adminEmail,
       adminPassword
     });
+    console.log('Login response:', data); // Debug log
 
     if (data.success) {
-      // 3. Wait for cookie to be processed (critical)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // 4. Verify session with retry logic
-      let attempts = 0;
-      const maxAttempts = 3;
-      
-      while (attempts < maxAttempts) {
+      toast.success('Login successful! Verifying session...');
+      console.log('Login successful, waiting for cookie...'); // Debug log
+
+      // 3. Wait for cookie to be processed with increasing delays
+      const verifySession = async (attempt = 1) => {
+        const delay = 300 * attempt; // Exponential backoff
+        console.log(`Verification attempt ${attempt}, waiting ${delay}ms`); // Debug log
+        
+        await new Promise(resolve => setTimeout(resolve, delay));
+        
         try {
+          console.log('Making verification request...'); // Debug log
           const verifyRes = await api.get('/admin/auth/verify');
-          
+          console.log('Verification response:', verifyRes.data); // Debug log
+
           if (verifyRes.data.success) {
-            // Update state and redirect
+            console.log('Verification successful!'); // Debug log
             setAdminAuthState({
               isLoggedin: true,
               adminData: verifyRes.data.admin,
               isLoading: false
             });
-            return navigate('/administrator/auth/dashboard');
+            navigate('/administrator/auth/dashboard', { replace: true });
+            return true;
           }
         } catch (verifyError) {
-          attempts++;
-          if (attempts >= maxAttempts) {
-            throw new Error('Max verification attempts reached');
+          console.error(`Verification attempt ${attempt} failed:`, verifyError); // Debug log
+          if (attempt >= 3) {
+            throw new Error('Maximum verification attempts reached');
           }
-          await new Promise(resolve => setTimeout(resolve, 500 * attempts));
+          return verifySession(attempt + 1);
         }
-      }
+      };
+
+      await verifySession();
+    } else {
+      throw new Error(data.message || 'Login failed');
     }
   } catch (error) {
-    console.error('Login error:', error);
-    toast.error(error.response?.data?.message || 'Session verification failed. Please try again.');
+    console.error('Login process error:', error); // Debug log
+    toast.error(error.response?.data?.message || error.message || 'Authentication failed. Please try again.');
   }
 };
 
