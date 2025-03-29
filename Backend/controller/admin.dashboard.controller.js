@@ -75,16 +75,19 @@ export const AdminLogin = async (req, res) => {
 
 export const verifyAdmin = async (req, res) => {
   try {
-    if (!req.admin) {
+    const token = req.cookies.admin_token;
+    
+    if (!token) {
       return res.status(401).json({ success: false });
     }
 
-    return res.json({
-      success: true,
-      admin: { id: req.admin.id, email: req.admin.email },
-    });
+    // Verify token and return minimal admin data
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return res.json({ success: true, admin: { id: decoded.id } });
+    
   } catch (error) {
-    return res.status(500).json({ success: false });
+    res.clearCookie("admin_token");
+    return res.status(401).json({ success: false });
   }
 };
 
