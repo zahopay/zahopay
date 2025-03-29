@@ -31,29 +31,27 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser()); 
 
-// CORS configuration
-const allowedOrigins = [
-  'https://zahopay.in',
-  'https://www.zahopay.in',
-  'https://zahopay-frontend.onrender.com'
-];
+
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  optionsSuccessStatus: 204,
-  exposedHeaders: ['set-cookie']
+    origin: [
+        'https://zahopay-frontend.onrender.com',
+        'https://zahopay.in',
+        'https://zahopay.onrender.com',
+        'https://zahopay-frontend.onrender.com'
+    ],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 };
 
-app.use(cors(corsOptions));
+app.use(cors((req, callback) => {
+    console.log('Origin:', req.header('Origin'));
+    cors(corsOptions)(req, res, callback);
+}));
+
 app.options('*', cors(corsOptions));
 
 
