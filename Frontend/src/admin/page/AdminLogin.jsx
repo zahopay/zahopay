@@ -10,7 +10,7 @@ const AdminLogin = () => {
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
 
-  const { backendUrl, setAdminAuthState, verifyAdmin, api } =
+  const { backendUrl, setAdminAuthState, verifyAdmin } =
     useContext(AppContext);
 
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const AdminLogin = () => {
   
   try {
     // 1. Make login request
-    const { data } = await api.post(
+    const { data } = await axios.post(
       `${backendUrl}/admin/auth/login`,
       { adminEmail, adminPassword },
       {
