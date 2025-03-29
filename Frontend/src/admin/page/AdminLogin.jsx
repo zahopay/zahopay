@@ -17,42 +17,47 @@ const AdminLogin = () => {
   const location = useLocation()
 
 
-const onFormSubmit = async (e) => {
-   e.preventDefault();
-  
-  try {
-    // 1. Make login request with credentials
-    const { data } = await axios.post(
-      `${backendUrl}/admin/auth/login`,
-      { adminEmail, adminPassword },
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+const AdminLogin = () => {
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const navigate = useNavigate();
 
-    // 2. If successful, verify the cookie
-    if (data.success) {
-      const verifyRes = await axios.get(
-        `${backendUrl}/admin/auth/verify`,
-        { withCredentials: true, 
-         headers: {
-      'Content-Type': 'application/json'
-         } 
-        },);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    try {
+      // Clear any existing cookies first
+      document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       
-      if (verifyRes.data.success) {
-        navigate("/administrator/auth/dashboard");
-      }
-    }
-  } catch (error) {
-    console.error("Login failed:", error);
-    toast.error(error.response?.data?.message || "Authentication failed");
-  }
-};
+      // 1. Make login request
+      const { data } = await api.post('/admin/auth/login', {
+        adminEmail,
+        adminPassword
+      });
 
+      if (data.success) {
+        // 2. Verify authentication after a brief delay
+        setTimeout(async () => {
+          try {
+            const verifyRes = await api.get('/admin/auth/verify');
+            
+            // 3. Only navigate if verification succeeds
+            if (verifyRes.data.success) {
+              navigate('/administrator/auth/dashboard', { replace: true });
+            } else {
+              toast.error('Authentication verification failed');
+            }
+          } catch (verifyError) {
+            console.error('Verification error:', verifyError);
+            toast.error('Session verification failed');
+          }
+        }, 300); // 300ms delay to ensure cookie is set
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error(error.response?.data?.message || 'Login failed');
+    }
+  };
 
 
   return (
