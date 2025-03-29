@@ -32,14 +32,12 @@ app.use(bodyParser.json());
 app.use(cookieParser()); 
 
 
-
 const corsOptions = {
     origin: [
         'https://zahopay-frontend.onrender.com',
         'https://zahopay.in',
         'https://zahopay.onrender.com',
-        'https://zahopay-frontend.onrender.com',
-        'https://api.zahopay.in'
+        'https://zahopay-frontend.onrender.com'
     ],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -48,11 +46,7 @@ const corsOptions = {
     optionsSuccessStatus: 204
 };
 
-app.use(cors((req, callback) => {
-    console.log('Origin:', req.header('Origin'));
-    cors(corsOptions)(req, res, callback);
-}));
-
+app.use(cors(corsOptions)); // Use cors middleware correctly
 app.options('*', cors(corsOptions));
 
 
