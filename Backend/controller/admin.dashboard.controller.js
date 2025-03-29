@@ -48,7 +48,7 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: 'none', // MUST BE 'none' for cross-site
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      domain: 'zahopay.in', // LEADING DOT IS CRUCIAL
+      domain: '.zahopay.in', // LEADING DOT IS CRUCIAL
       path: "/"
     });
 
