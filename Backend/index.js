@@ -36,16 +36,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // CORS configuration
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true, // REQUIRED
-    exposedHeaders: ["set-cookie"], // REQUIRED
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  })
-);
+const corsOptions = {allowedOrigins ,
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
 
-app.options("*", cors());
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // ✅ Must come before routes
 app.use(cookieParser()); 
