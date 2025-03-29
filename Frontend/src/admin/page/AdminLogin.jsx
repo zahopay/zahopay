@@ -37,10 +37,13 @@ const onFormSubmit = async (e) => {
     if (data.success) {
       const verifyRes = await axios.get(
         `${backendUrl}/admin/auth/verify`,
-        { withCredentials: true }
-      );
+        { withCredentials: true, 
+         headers: {
+      'Content-Type': 'application/json'
+         } 
+        },);
 
-      console.log(verifyRes.data)
+      console.log(verifyRes.data.success)
       
       if (verifyRes.data.success) {
         navigate("/administrator/auth/dashboard");
