@@ -20,45 +20,43 @@ const AdminLogin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    try {
-      // Clear any existing cookies first
-      document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-      
-      const { data } = await axios.post(
-        `${backendUrl}/admin/auth/login`,
-        { adminEmail, adminPassword },
-        { withCredentials: true }
-      );
 
-      if (data.success) {
-        // Verify the session after a short delay
-        setTimeout(async () => {
-          try {
-            const verifyRes = await axios.get(
-              `${backendUrl}/admin/auth/verify`,
-              { withCredentials: true }
-            );
-            
-            if (verifyRes.data.success) {
-              setAdminAuthState({
-                isLoggedin: true,
-                adminData: verifyRes.data.admin,
-                isLoading: false
-              });
-              navigate('/administrator/dashboard');
-            } else {
-              toast.error('Session verification failed');
+    try {
+        // Clear any existing cookies first
+        document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+
+        const { data } = await axios.post(
+            `${backendUrl}/admin/auth/login`,
+            { adminEmail, adminPassword },
+            { withCredentials: true }
+        );
+
+        if (data.success) {
+            // Verify the session immediately
+            try {
+                const verifyRes = await axios.get(
+                    `${backendUrl}/admin/auth/verify`,
+                    { withCredentials: true }
+                );
+
+                if (verifyRes.data.success) {
+                    setAdminAuthState({
+                        isLoggedin: true,
+                        adminData: verifyRes.data.admin,
+                        isLoading: false
+                    });
+                    navigate('/administrator/dashboard');
+                } else {
+                    toast.error('Session verification failed');
+                }
+            } catch (verifyError) {
+                toast.error('Failed to verify session');
             }
-          } catch (verifyError) {
-            toast.error('Failed to verify session');
-          }
-        }, 500);
-      }
+        }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Login failed');
+        toast.error(error.response?.data?.message || 'Login failed');
     }
-  };
+};
 
   return (
     <div className="h-lvh">
