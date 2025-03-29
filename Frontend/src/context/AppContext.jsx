@@ -7,7 +7,7 @@ const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
 
-  const backendUrl = "https://zahopay.onrender.com"
+  const backendUrl = "https://api.zahopay.in"
   const frontendUrl = "https://zahopay.in";
 
 
@@ -109,7 +109,7 @@ const verifyAdmin = async () => {
   }, []);
 
   const api = axios.create({
-  baseURL: 'https://api.zahopay.in',
+  baseURL: backendUrl,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
