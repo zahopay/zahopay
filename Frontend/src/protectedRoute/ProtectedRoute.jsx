@@ -5,7 +5,7 @@ import {motion} from "framer-motion"
 
 
 const ProtectedRoute = () => {
-  const { userData, authState, setAuthState , verifyAuth } = useContext(AppContext);
+  const { userData, authState, setAuthState , verifyAuth, backendUrl } = useContext(AppContext);
 
   const [authChecked, setAuthChecked] = useState(false);
     const navigate = useNavigate();
