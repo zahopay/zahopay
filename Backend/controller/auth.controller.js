@@ -49,6 +49,15 @@ export const register = async (req, res) => {
       path: "/",
     });
 
+    console.log( res.cookie("accessid", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      domain: "zahopay.in",
+      path: "/",
+    });)
+
     //sending mail otp
 
     const mailOptions = {
