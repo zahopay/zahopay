@@ -135,36 +135,26 @@ useEffect(() => {
     verifyAuth();
   }, []);
 
-  useEffect(() => {
-    axios.defaults.withCredentials = true;
-    axios.defaults.baseURL = backendUrl;
+  const api = axios.create({
+  baseURL: 'https://zahopay.onrender.com',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+  }
+});
 
-    // Add response interceptor
-   axios.interceptors.response.use(
-     (response) => response,
-     (error) => {
-       if (error.response?.status === 401) {
-         // Handle admin and user auth separately
-         if (error.config.url.includes("/admin/")) {
-           setAdminAuthState({
-             isLoggedin: false,
-             adminData: null,
-             isLoading: false,
-           });
-           localStorage.removeItem("admin_token");
-         } else {
-           setAuthState({
-             isLoggedin: false,
-             userData: null,
-             isLoading: false,
-           });
-         }
-       }
-       return Promise.reject(error);
-     }
-   );
-  }, []);
-
+// Add response interceptor
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      // Redirect to login if unauthorized
+      window.location.href = '/administrator/adminlogin';
+    }
+    return Promise.reject(error);
+  }
+);
   // logout
 
   const logout = async () => {
