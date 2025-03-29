@@ -51,16 +51,22 @@ connectDB();
 app.use(express.json())
 app.use(cookieParser())
 // Replace all CORS-related code with this single middleware:
-app.use(cors({
-  origin: ['https://zahopay-frontend.onrender.com', 'https://zahopay.in'],
+const corsOptions = {
+  origin: [
+    'https://zahopay-frontend.onrender.com',
+    'http://localhost:3000' // for development
+  ],
   credentials: true,
-  exposedHeaders: ['set-cookie'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
-}));
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); 
 app.use(express.urlencoded({extended : true}))
 app.use(bodyParser.json())
-app.options("*", cors());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
