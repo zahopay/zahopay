@@ -132,7 +132,6 @@ api.interceptors.response.use(
 
       const { data } = await axios.post(backendUrl + "/api/auth/logout");
       if (data.success) {
-        setIsLoggedin(false);
         setUserData(null);
         toast.success(data.message);
         navigate("/");
