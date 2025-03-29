@@ -20,7 +20,7 @@ const adminAuth = (req, res, next) => {
   } catch (error) {
     console.error("JWT verification failed:", error);
     res.clearCookie("admin_token", {
-      domain: '.onrender.com',
+      domain: 'zahopay.in',
       path: '/'
     });
     return res.status(401).json({ 
