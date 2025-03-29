@@ -21,42 +21,48 @@ const AdminLogin = () => {
   e.preventDefault();
   
   try {
-    // Clear existing cookies
+    // 1. Clear existing cookies
     document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     
-    // 1. Make login request
+    // 2. Make login request
     const { data } = await axios.post(`${backendUrl}/admin/auth/login`, {
       adminEmail,
       adminPassword
     }, {
-      withCredentials: true
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     if (data.success) {
       toast.success("Login successful");
       
-      // 2. Wait for cookie to be processed
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // 3. Wait for cookie to be processed (critical)
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // 3. Verify authentication
+      // 4. Verify session
       try {
         const verifyRes = await axios.get(`${backendUrl}/admin/auth/verify`, {
           withCredentials: true
         });
         
         if (verifyRes.data.success) {
+          // Update auth state
           setAdminAuthState({
             isLoggedin: true,
             adminData: verifyRes.data.admin,
             isLoading: false
           });
-          navigate('/administrator/auth/dashboard', { replace: true });
+          
+          // Navigate to dashboard
+          navigate('/administrator/auth/dashboard');
         } else {
-          throw new Error("Verification failed");
+          throw new Error("Server verification failed");
         }
       } catch (verifyError) {
-        console.error('Verify error:', verifyError);
-        toast.error('Session verification failed');
+        console.error('Verification error:', verifyError);
+        toast.error('Session verification failed. Please try again.');
       }
     }
   } catch (error) {
