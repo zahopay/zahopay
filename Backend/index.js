@@ -38,7 +38,8 @@ const corsOptions = {
         'https://zahopay-frontend.onrender.com',
         'https://zahopay.in',
         'https://zahopay.onrender.com',
-        'https://zahopay-frontend.onrender.com'
+        'https://zahopay-frontend.onrender.com',
+        'https://api.zahopay.in'
     ],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
