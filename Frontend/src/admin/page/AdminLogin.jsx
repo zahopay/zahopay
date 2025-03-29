@@ -31,16 +31,6 @@ const onFormSubmit = async (e) => {
 
     if (data?.success) {
 
-       sessionStorage.setItem('admin_session_token', data.admin.token);
-      // Store token in localStorage as fallback
-      localStorage.setItem("admin_token", data.admin.token);
-
-      // Set default Authorization header
-      api.defaults.headers.common['Authorization'] = `Bearer ${data.admin.token}`;
-
-       
-  
-  // 2. Set default auth header
 
       // Verify authentication
       try {
@@ -50,7 +40,6 @@ const onFormSubmit = async (e) => {
 
         
         if (verifyResponse.data.success) {
-          // Successful login
           navigate("/administrator/auth/dashboard");
         } else {
           throw new Error("Verification failed");
@@ -67,16 +56,6 @@ const onFormSubmit = async (e) => {
 };
 
 
-
-// Helper function to verify cookie
-const verifyAdminCookie = async () => {
-  try {
-    const response = await api.get( backendUrl + "/admin/auth/verify");
-    return response.data.success;
-  } catch {
-    return false;
-  }
-};
 
   return (
     <div className="h-lvh">
