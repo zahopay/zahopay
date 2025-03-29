@@ -212,6 +212,7 @@ api.interceptors.response.use(
     setAdminAuthState,
     frontendUrl,
     api,
+    verifyAdmin,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
