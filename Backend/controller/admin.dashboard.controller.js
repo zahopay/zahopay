@@ -53,7 +53,7 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: ".zahopay.in",
+      domain: '.onrender.com',
       path: "/",
     });
 
