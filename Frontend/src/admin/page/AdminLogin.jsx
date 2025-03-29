@@ -39,6 +39,8 @@ const onFormSubmit = async (e) => {
         `${backendUrl}/admin/auth/verify`,
         { withCredentials: true }
       );
+
+      console.log(verifyRes.data)
       
       if (verifyRes.data.success) {
         navigate("/administrator/auth/dashboard");
