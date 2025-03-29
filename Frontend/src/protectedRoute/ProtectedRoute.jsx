@@ -1,11 +1,15 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import {motion} from "framer-motion"
 
 
 const ProtectedRoute = () => {
-  const { userData, authState } = useContext(AppContext);
+  const { userData, authState, verifyAuth } = useContext(AppContext);
+
+  useEffect(() => {
+    verifyAuth()
+  }, [authState.isLoggedin])
 
 
 if (authState.isLoading) {
