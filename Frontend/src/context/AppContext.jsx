@@ -32,41 +32,20 @@ export const AppContextProvider = ({ children }) => {
 
 
   const verifyAuth = async () => {
-    try {
-      const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
-        withCredentials: true,
-      });
+        try {
+        const response = await axios.get(`${backendUrl}/api/auth/is-auth"`, {
+            withCredentials: true,
+        });
 
-      if (data.success) {
-        setAuthState({
-          isLoggedin: true,
-          userData: data.userDetails,
-          isLoading: false,
-        });
-        setUserData(data.userDetails);
-        setIsLoggedin(true)
-        return true
-      } else {
-        setAuthState({
-          isLoggedin: false,
-          userData: null,
-          isLoading: false,
-        });
-        setIsLoggedin(false)
-        setUserData(null);
-        return false
-      }
+        if (response.data.success) {
+            return { success: true, user: response.data.userDetials };
+        } else {
+            return { success: false };
+        }
     } catch (error) {
-      setAuthState({
-        isLoggedin: false,
-        userData: null,
-        isLoading: false,
-      });
-      setUserData(null);
-      setIsLoggedin(false);
-      return false
+        return { success: false };
     }
-  };
+};
 
     const logoutAdmin = async () => {
       try {
@@ -104,9 +83,6 @@ const verifyAdmin = async () => {
 };
 
 
-  useEffect(() => {
-    verifyAuth();
-  }, []);
 
   const api = axios.create({
   baseURL: backendUrl,
