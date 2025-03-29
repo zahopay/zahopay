@@ -34,17 +34,7 @@ const AdminLogin = () => {
 
     // 2. Verify session
     if (data.success) {
-      const verifyRes = await axios.get(
-        `${backendUrl}/admin/auth/verify`,
-        { 
-          withCredentials: true,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
-      
-      if (verifyRes.data.success) {
-        navigate("/administrator/auth/dashboard");
-      }
+      navigate("/administrator/auth/dashboard");      
     }
   } catch (error) {
     console.error("Login failed:", error);
