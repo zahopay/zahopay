@@ -20,33 +20,36 @@ const AdminLogin = () => {
 
   const onFormSubmit = async (e) => {
   e.preventDefault();
-
+  
   try {
-    const { data } = await axios.post("/admin/auth/login", {
-      adminEmail,
-      adminPassword,
-    }, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
+    // 1. Make login request with credentials
+    const { data } = await axios.post(
+      `${backendUrl}/admin/auth/login`,
+      { adminEmail, adminPassword },
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
-    });
+    );
 
-    if (data?.success) {
-      const verifyResponse = await axios.get("/admin/auth/verify", {
-        withCredentials: true
-      });
+    // 2. If successful, verify the cookie
+    if (data.success) {
+      const verifyRes = await axios.get(
+        `${backendUrl}/admin/auth/verify`,
+        { withCredentials: true }
+      );
       
-      if (verifyResponse.data.success) {
+      if (verifyRes.data.success) {
         navigate("/administrator/auth/dashboard");
       }
     }
   } catch (error) {
-    console.error("Login error:", error);
-    toast.error(error.response?.data?.message || "Login failed");
+    console.error("Login failed:", error);
+    toast.error(error.response?.data?.message || "Authentication failed");
   }
 };
-
   
   return (
     <div className="h-lvh">
