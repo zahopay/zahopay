@@ -70,20 +70,34 @@ export const AdminLogin = async (req, res) => {
 
 export const verifyAdmin = async (req, res) => {
   try {
-    const {admin_token} = req.body;
+    // Get token from cookies (not body)
+    const token = req.cookies.admin_token;
     
-    if (!admin_token) {
-      return res.status(401).json({ success: false });
+    if (!token) {
+      return res.status(401).json({ 
+        success: false,
+        message: "No authentication token found"
+      });
     }
 
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
     return res.json({
       success: true,
-      admin: { admin_token },
+      admin: { id: decoded.id }
     });
     
   } catch (error) {
-    res.clearCookie("admin_token");
-    return res.status(500).json({ success: false });
+    console.error("Verification error:", error);
+    res.clearCookie("admin_token", {
+      domain: '.zahopay.in',
+      path: '/'
+    });
+    return res.status(401).json({ 
+      success: false,
+      message: "Invalid or expired session"
+    });
   }
 };
 
