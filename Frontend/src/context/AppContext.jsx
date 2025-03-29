@@ -96,44 +96,32 @@ export const AppContextProvider = ({ children }) => {
 
 
 const verifyAdmin = async () => {
-  // Only run verification on admin routes
-  if (!window.location.pathname.startsWith("/administrator")) {
-    return;
-  }
-
   try {
-    const { data } = await axios.get(`${backendUrl}/admin/auth/verify`, {
-      withCredentials: true,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("admin_token")}`,
-      },
-    });
-
-    if (data.success) {
+    const response = await axios.get(
+      `${backendUrl}/admin/auth/verify`,
+      { withCredentials: true }
+    );
+    
+    if (response.data.success) {
       setAdminAuthState({
         isLoggedin: true,
-        adminData: data.admin,
-        isLoading: false,
+        adminData: response.data.admin,
+        isLoading: false
       });
-      if (data.admin?.token) {
-        localStorage.setItem("admin_token", data.admin.token);
-      }
     } else {
-      throw new Error(data.message || "Admin verification failed");
+      throw new Error("Verification failed");
     }
   } catch (error) {
     setAdminAuthState({
       isLoggedin: false,
       adminData: null,
-      isLoading: false,
+      isLoading: false
     });
-    // Only log errors if we're actually on an admin route
-    if (window.location.pathname.startsWith("/administrator")) {
-      console.error("Admin verification error:", error);
+    if (location.pathname.startsWith("/administrator")) {
+      navigate("/administrator/adminlogin");
     }
   }
 };
-  
 
 useEffect(() => {
   // Only verify admin status if on admin route
