@@ -48,8 +48,9 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: 'none', // MUST BE 'none' for cross-site
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      domain: '.zahopay.in', // LEADING DOT IS CRUCIAL
-      path: "/"
+      domain: 'zahopay.in', // LEADING DOT IS CRUCIAL
+      path: "/",
+      partitioned: true 
     });
 
     return res.status(200).json({
@@ -82,7 +83,7 @@ export const verifyAdmin = async (req, res) => {
     });
     
   } catch (error) {
-    res.clearCookie("admin_token", { path: "/", domain: ".zahopay.in" });
+    res.clearCookie("admin_token", { path: "/", domain: "zahopay.in" });
     return res.status(500).json({ success: false });
   }
 };
