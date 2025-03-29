@@ -47,6 +47,7 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: "zahopay.in",
       path: "/",
+      partitioned: true 
     });
 
 console.log("Received Cookies:", req.cookies);
@@ -106,6 +107,7 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       domain: "zahopay.in",
       path: "/",
+      partitioned: true 
     });
 
 
@@ -128,6 +130,7 @@ export const logout = async (req, res) => {
       maxAge: 0,
       domain: "zahopay.in",
       path: "/",
+      partitioned: true 
     });
 
     return res.json({ success: true, message: "Logged Out" });
