@@ -10,23 +10,21 @@ import moment from "moment/moment.js";
 
 
 export const AdminLogin = async (req, res) => {
-   const { adminEmail, adminPassword } = req.body;
-
-  if (!adminEmail || !adminPassword) {
-    return res.status(400).json({
-      success: false,
-      message: "Email and password are required",
-    });
-  }
-
   try {
+    const { adminEmail, adminPassword } = req.body;
+
+    if (!adminEmail || !adminPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
     const admin = await AdminModel.findOne({ adminEmail });
-
-
     if (!admin) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials", // Don't specify which field is wrong
+        message: "Invalid credentials",
       });
     }
 
@@ -41,26 +39,22 @@ export const AdminLogin = async (req, res) => {
     const token = jwt.sign(
       { id: admin._id, role: "admin" },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "8h",
-      }
+      { expiresIn: "8h" }
     );
 
-
-    // Ensure cookie configuration is correct
+    // Set cookie with proper configuration
     res.cookie("admin_token", token, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: '.onrender.com',
+      maxAge: 8 * 60 * 60 * 1000, // 8 hours
+      domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : 'localhost',
       path: "/",
     });
 
-
     return res.status(200).json({
       success: true,
-      admin: { id: admin._id, email: admin.adminEmail , token},
+      admin: { id: admin._id, email: admin.adminEmail },
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -71,17 +65,11 @@ export const AdminLogin = async (req, res) => {
   }
 };
 
-
-
-// In your auth controller
 export const verifyAdmin = async (req, res) => {
   try {
-    console.log('Received cookies:', req.cookies); // Debug log
-    
-    const token = req.cookies.admin_token || req.headers.authorization?.split(' ')[1];
+    const token = req.cookies.admin_token;
     
     if (!token) {
-      console.log('No token found');
       return res.status(401).json({ 
         success: false,
         message: "No authentication token found" 
@@ -90,7 +78,6 @@ export const verifyAdmin = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // Return minimal admin data
     return res.json({ 
       success: true,
       admin: { 
@@ -98,11 +85,9 @@ export const verifyAdmin = async (req, res) => {
         email: decoded.email 
       }
     });
-    
   } catch (error) {
-    console.error('Verification error:', error.message);
     res.clearCookie("admin_token", {
-      domain: '.onrender.com',
+      domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : 'localhost',
       path: '/'
     });
     return res.status(401).json({ 
@@ -111,7 +96,6 @@ export const verifyAdmin = async (req, res) => {
     });
   }
 };
-
 
 
 export const adminLogout = (req, res) => {
