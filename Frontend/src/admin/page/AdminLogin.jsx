@@ -32,8 +32,6 @@ const AdminLogin = () => {
 
       if (data.success) {
         toast.success(data.message)
-        // 2. Verify authentication after a brief delay
-        setTimeout(async () => {
           try {
             const verifyRes = await verifyAdmin()
             
@@ -47,7 +45,6 @@ const AdminLogin = () => {
             console.error('Verification error:', verifyError);
             toast.error('Session verification failed');
           }
-        }, 300); // 300ms delay to ensure cookie is set
       }
     } catch (error) {
       console.error('Login error:', error);
