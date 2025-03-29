@@ -34,6 +34,7 @@ const AdminLogin = () => {
 
     // 2. Verify session
     if (data.success) {
+      toast.success(data.message);
       navigate("/administrator/auth/dashboard");      
     }
   } catch (error) {
