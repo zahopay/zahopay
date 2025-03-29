@@ -22,13 +22,6 @@ import startPlanExpiryCron from "./controller/planExpiryChecker.controller.js";
 const app = express();
 const port = process.env.PORT || 5040;
 
-const allowedOrigins = [
-  'https://zahopay.in',
-  'https://api.zahopay.in',
-  'https://zahopay.onrender.com',
-  'https://zahopay-frontend.onrender.com'
-];
-
 // Connect to database first
 connectDB();
 
@@ -39,23 +32,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // CORS configuration
+const allowedOrigins = [
+  'https://zahopay.in',
+  'https://www.zahopay.in',
+  'https://zahopay-frontend.onrender.com'
+];
+
 const corsOptions = {
-  origin: [
-    'https://zahopay-frontend.onrender.com',
-    'https://zahopay.in',
-    'https://zahopay.onrender.com',
-    'https://zahopay-frontend.onrender.com'
-  ],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 204,
+  exposedHeaders: ['set-cookie']
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
-
+app.options('*', cors(corsOptions));
 
 
 
