@@ -20,29 +20,27 @@ const AdminLogin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     try {
-      // 1. Clear existing cookies
-      document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-      
-      // 2. Make login request
-      const { data } = await api.post('/admin/auth/login', {
+      // ✅ 1. Clear existing cookies
+      document.cookie =
+        "admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
+      // ✅ 2. Make login request
+      const { data } = await api.post("/admin/auth/login", {
         adminEmail,
-        adminPassword
+        adminPassword,
       });
 
       if (data.success) {
-        // 3. Wait for cookie to be processed
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // 4. Force page reload to ensure cookie is picked up
-        window.location.href = '/administrator/dashboard';
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        window.location.href = "/administrator/dashboard";
       }
     } catch (error) {
-      console.error('Login error:', error);
-      toast.error(error.response?.data?.message || 'Login failed. Please try again.');
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
+
 
   
   return (
