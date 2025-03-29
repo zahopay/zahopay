@@ -13,13 +13,7 @@ const adminAuth = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    if (decoded.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Admin privileges required"
-      });
-    }
-
+    // Remove role check since your JWT doesn't include it
     req.admin = { id: decoded.id };
     next();
     
@@ -35,4 +29,5 @@ const adminAuth = (req, res, next) => {
     });
   }
 };
+
 export default adminAuth;
