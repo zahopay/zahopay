@@ -98,12 +98,8 @@ export const adminLogout = (req, res) => {
 
 
 export const getAllUser = async(req, res) => {
-  const { adminToken } = req.body;
 
   try {
-    if (!adminToken) {
-      return res.json({ success: false, message: "Unauthorized" });
-    }
 
     const allUsers = await userModel.aggregate([
       {$sort : {createdAt : -1}}
@@ -118,12 +114,10 @@ export const getAllUser = async(req, res) => {
 }
 
 export const getAllPaymentForm = async(req, res) => {
-  const { adminToken } = req.body;
+
 
   try {
-    if (!adminToken) {
-      return res.json({ success: false, message: "Unauthorized" });
-    }
+
 
     const allPaymentForm = await paymentFormModel.aggregate([{ $sort: { createdAt: -1 } }]);
 
@@ -135,12 +129,10 @@ export const getAllPaymentForm = async(req, res) => {
 }
 
 export const getAllPurchase = async(req,res) => {
-  const { adminToken } = req.body;
+
 
   try {
-    if (!adminToken) {
-      return res.json({ success: false, message: "Unauthorized" });
-    }
+
 
     const allUsers = await userModel.aggregate([{ $sort: { createdAt: -1 } }]);
 
@@ -152,12 +144,10 @@ export const getAllPurchase = async(req,res) => {
 }
 
 export const getAllCustomers = async(req, res) => {
-  const { adminToken } = req.body;
+
 
   try {
-    if (!adminToken) {
-      return res.json({ success: false, message: "Unauthorized" });
-    }
+
 
     const allUsers = await userModel.aggregate([{ $sort: { createdAt: -1 } }]);
 
@@ -170,12 +160,10 @@ export const getAllCustomers = async(req, res) => {
 
 export const getAllIndividualuserProducts = async(req, res) => {
 
-  const { adminToken, userId } = req.body;
+  const { userId } = req.body;
 
   try {
-    if (!adminToken) {
-      return res.json({ success: false, message: "Unauthorized" });
-    }
+
 
     const allUserProducts = await paymentFormModel.aggregate([
       { $match: { userId : new mongoose.Types.ObjectId(userId) } },
@@ -191,11 +179,6 @@ export const getAllIndividualuserProducts = async(req, res) => {
 export const fetchAllPurchase = async (req, res) =>{
   try {
 
-    const { adminToken } = req.body;
-
-      if (!adminToken) {
-        return res.json({ success: false, message: "Unauthorized" });
-      }
 
       const allPurchase = await purchaseModel.aggregate([
         {$sort : {createdAt : -1}}
@@ -212,11 +195,7 @@ export const fetchAllPurchase = async (req, res) =>{
 
 export const fetchAllUserPlanPayment = async(req, res) => {
   try {
-    const {adminToken} = req.body;
 
-    if (!adminToken) {
-      return res.json({ success: false, message: "Unauthorized" });
-    }
 
     const allPlanPayments = await planVerificationModel.aggregate([
       {
