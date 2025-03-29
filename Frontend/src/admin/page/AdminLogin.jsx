@@ -10,7 +10,7 @@ const AdminLogin = () => {
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
 
-  const { backendUrl, setAdminAuthState, api, verifyAdmin } =
+  const { backendUrl, setAdminAuthState, verifyAdmin } =
     useContext(AppContext);
 
   const navigate = useNavigate();
