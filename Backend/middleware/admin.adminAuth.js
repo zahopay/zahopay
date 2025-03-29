@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 const adminAuth = (req, res, next) => {
-  
   const token = req.cookies.admin_token;
 
   if (!token) {
@@ -14,13 +13,20 @@ const adminAuth = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
+    if (decoded.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Admin privileges required"
+      });
+    }
+
     req.admin = { id: decoded.id };
     next();
     
   } catch (error) {
     console.error("JWT verification failed:", error);
     res.clearCookie("admin_token", {
-      domain:  '.zahopay.in',
+      domain: '.zahopay.in',
       path: '/'
     });
     return res.status(401).json({ 
@@ -29,5 +35,4 @@ const adminAuth = (req, res, next) => {
     });
   }
 };
-
 export default adminAuth;
