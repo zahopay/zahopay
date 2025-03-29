@@ -1,9 +1,6 @@
 import jwt from "jsonwebtoken";
 
 const adminAuth = (req, res, next) => {
-    console.log("Received cookies:", req.cookies);
-    console.log("admin_token:", req.cookies.admin_token);
-    console.log("Request Headers:", req.headers);
 
     const token = req.cookies.admin_token;
 
