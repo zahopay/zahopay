@@ -18,7 +18,7 @@ const [loading, setLoading] = useState(true);
       setAuthChecked(true);
       
       if (!isAuthenticated && window.location.pathname.startsWith('/administrator')) {
-        navigate('/administrator/login');
+        navigate('/administrator/adminlogin');
       }
     };
     
