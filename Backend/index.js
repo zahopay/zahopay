@@ -23,9 +23,8 @@ const app = express();
 const port = process.env.PORT || 5040;
 
 const allowedOrigins = [
-  'https://zahopay-frontend.onrender.com',
   'https://zahopay.in',
-  'http://localhost:3000' // Add localhost for development
+  'https://api.zahopay.in',
 ];
 
 // Connect to database first
