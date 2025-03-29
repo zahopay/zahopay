@@ -109,7 +109,7 @@ const verifyAdmin = async () => {
   }, []);
 
   const api = axios.create({
-  baseURL: 'https://zahopay.onrender.com',
+  baseURL: 'https://api.zahopay.in',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
