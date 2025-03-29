@@ -45,14 +45,12 @@ export const register = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: "zahopay.in",
+      domain: ".zahopay.in",
       path: "/",
       partitioned: true 
     });
 
-console.log("Received Cookies:", req.cookies);
 
-    console.log("token:", token);
 
 
     //sending mail otp
@@ -105,7 +103,7 @@ export const login = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: "zahopay.in",
+      domain: ".zahopay.in",
       path: "/",
       partitioned: true 
     });
@@ -128,7 +126,7 @@ export const logout = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 0,
-      domain: "zahopay.in",
+      domain: ".zahopay.in",
       path: "/",
       partitioned: true 
     });
