@@ -90,7 +90,12 @@ const verifyAdmin = async () => {
   try {
     const response = await axios.get(
       `${backendUrl}/admin/auth/verify`,
-      { withCredentials: true }
+      { 
+        withCredentials: true,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }
     );
     
     if (response.data.success) {
@@ -99,21 +104,16 @@ const verifyAdmin = async () => {
         adminData: response.data.admin,
         isLoading: false
       });
-      return true
-    } else {
-      throw new Error("Verification failed");
-      return false
+      return true;
     }
+    throw new Error("Verification failed");
   } catch (error) {
     setAdminAuthState({
       isLoggedin: false,
       adminData: null,
       isLoading: false
     });
-    return false
-    if (location.pathname.startsWith("/administrator")) {
-      navigate("/administrator/adminlogin");
-    }
+    return false;
   }
 };
   
