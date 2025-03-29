@@ -5,14 +5,38 @@ import {motion} from "framer-motion"
 
 
 const ProtectedRoute = () => {
-  const { userData, authState, verifyAuth } = useContext(AppContext);
+  const { userData, authState, setAuthState , verifyAuth } = useContext(AppContext);
 
-  useEffect(() => {
-    verifyAuth()
-  }, [authState.isLoggedin])
+  const [authChecked, setAuthChecked] = useState(false);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await axios.get(
+                    `${backendUrl}/api/auth/is-auth`,
+                    { withCredentials: true }
+                );
 
-if (authState.isLoading) {
+                if (response.data.success) {
+                    setAuthState({
+                        isLoggedin: true,
+                        userData: response.data.admin,
+                        isLoading: false,
+                    });
+                } else {
+                    navigate('/login');
+                }
+            } catch (error) {
+                navigate('/login');
+            }
+            setAuthChecked(true);
+        };
+
+        checkAuth();
+    }, [navigate, backendUrl, setAuthState]);
+
+if (!authChecked) {
   return  (
       <motion.div
         initial={{ opacity: 0 }}
