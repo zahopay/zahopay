@@ -70,25 +70,17 @@ export const AdminLogin = async (req, res) => {
 
 export const verifyAdmin = async (req, res) => {
   try {
-    const token = req.cookies.admin_token;
+    const {admin_token} = req.body;
     
-    if (!token) {
+    if (!admin_token) {
       return res.status(401).json({ success: false });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    if (decoded.role !== "admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Admin access required",
-      });
     }
 
     return res.json({
       success: true,
-      admin: { id: decoded.id, email: decoded.email },
+      admin: { admin_token },
     });
+    
   } catch (error) {
     res.clearCookie("admin_token");
     return res.status(500).json({ success: false });
