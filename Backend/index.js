@@ -25,6 +25,8 @@ const port = process.env.PORT || 5040;
 const allowedOrigins = [
   'https://zahopay.in',
   'https://api.zahopay.in',
+  'https://zahopay.onrender.com',
+  'https://zahopay-frontend.onrender.com/'
 ];
 
 // Connect to database first
