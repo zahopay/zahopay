@@ -20,44 +20,31 @@ const AdminLogin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    
     try {
-        // Clear any existing cookies first
-        document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      // 1. Clear existing cookies
+      document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      
+      // 2. Make login request
+      const { data } = await api.post('/admin/auth/login', {
+        adminEmail,
+        adminPassword
+      });
 
-        const { data } = await axios.post(
-            `${backendUrl}/admin/auth/login`,
-            { adminEmail, adminPassword },
-            { withCredentials: true }
-        );
-
-        if (data.success) {
-            // Verify the session immediately
-            try {
-                const verifyRes = await axios.get(
-                    `${backendUrl}/admin/auth/verify`,
-                    { withCredentials: true }
-                );
-
-                if (verifyRes.data.success) {
-                    setAdminAuthState({
-                        isLoggedin: true,
-                        adminData: verifyRes.data.admin,
-                        isLoading: false
-                    });
-                    navigate('/administrator/dashboard');
-                } else {
-                    toast.error('Session verification failed');
-                }
-            } catch (verifyError) {
-                toast.error('Failed to verify session');
-            }
-        }
+      if (data.success) {
+        // 3. Wait for cookie to be processed
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // 4. Force page reload to ensure cookie is picked up
+        window.location.href = '/administrator/dashboard';
+      }
     } catch (error) {
-        toast.error(error.response?.data?.message || 'Login failed');
+      console.error('Login error:', error);
+      toast.error(error.response?.data?.message || 'Login failed. Please try again.');
     }
-};
+  };
 
+  
   return (
     <div className="h-lvh">
       <div className="w-[100%] flex justify-center items-center bg-blue-900 h-full">
