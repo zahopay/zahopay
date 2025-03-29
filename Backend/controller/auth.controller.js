@@ -226,6 +226,8 @@ export const isAuthenticted = async (req, res) => {
 export const isAuth = async (req, res) => {
   try {
     const token = req.cookies.accessid; 
+
+    console.log(token)
     
     if (!token) {
       return res.json({ success: false });
@@ -233,6 +235,10 @@ export const isAuth = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await userModel.findById(decoded.id).select('-password');
+
+    console.log("decoded : ", decoded)
+
+    console.log("user : ", user)
 
     if (!user) {
       return res.json({ success: false });
