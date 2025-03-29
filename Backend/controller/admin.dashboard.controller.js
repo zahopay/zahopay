@@ -73,6 +73,7 @@ export const AdminLogin = async (req, res) => {
 
 
 
+// In your auth controller
 export const verifyAdmin = async (req, res) => {
   try {
     console.log('Received cookies:', req.cookies); // Debug log
@@ -81,27 +82,33 @@ export const verifyAdmin = async (req, res) => {
     
     if (!token) {
       console.log('No token found');
-      return res.status(401).json({ success: false });
+      return res.status(401).json({ 
+        success: false,
+        message: "No authentication token found" 
+      });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Decoded token:', decoded); // Debug log
     
+    // Return minimal admin data
     return res.json({ 
-      success: true, 
+      success: true,
       admin: { 
         id: decoded.id,
-        email: decoded.email || null 
-      } 
+        email: decoded.email 
+      }
     });
     
   } catch (error) {
-    console.error('Verify error:', error);
+    console.error('Verification error:', error.message);
     res.clearCookie("admin_token", {
       domain: '.onrender.com',
       path: '/'
     });
-    return res.status(401).json({ success: false });
+    return res.status(401).json({ 
+      success: false,
+      message: "Invalid or expired session" 
+    });
   }
 };
 
