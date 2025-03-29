@@ -99,8 +99,10 @@ const verifyAdmin = async () => {
         adminData: response.data.admin,
         isLoading: false
       });
+      return true
     } else {
       throw new Error("Verification failed");
+      return false
     }
   } catch (error) {
     setAdminAuthState({
@@ -108,6 +110,7 @@ const verifyAdmin = async () => {
       adminData: null,
       isLoading: false
     });
+    return false
     if (location.pathname.startsWith("/administrator")) {
       navigate("/administrator/adminlogin");
     }
