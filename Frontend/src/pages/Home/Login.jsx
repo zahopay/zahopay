@@ -33,10 +33,6 @@ const Login = () => {
 
        if (data.success) {
   toast.success(data.message);
-  const authVerified = await verifyAuth();
-  if (authVerified) {
-    navigate("/user/dashboard");
-  }
 } else {
           toast.error(data.message);
         }
