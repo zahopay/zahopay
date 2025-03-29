@@ -48,7 +48,7 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      domain: '.onrender.com' ,
+      domain: 'zahopay.in' ,
       path: "/",
     });
 
@@ -87,7 +87,7 @@ export const verifyAdmin = async (req, res) => {
     });
   } catch (error) {
     res.clearCookie("admin_token", {
-      domain: '.onrender.com',
+      domain: 'zahopay.in',
       path: '/'
     });
     return res.status(401).json({ 
@@ -99,7 +99,7 @@ export const verifyAdmin = async (req, res) => {
 
 
 export const adminLogout = (req, res) => {
-    res.clearCookie("admin_token", { path: "/" , domain : '.onrender.com',});
+    res.clearCookie("admin_token", { path: "/" , domain : 'zahopay.in',});
   res.json({ success: true, message: "Logged out" });
 };
 
