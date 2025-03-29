@@ -39,7 +39,6 @@ export const AppContextProvider = ({ children }) => {
 
         if (data.success) {
             setUserData(data.userDetials);
-            setIsLoggedin(true); 
         } else {
             toast.error(data.message);
         }
