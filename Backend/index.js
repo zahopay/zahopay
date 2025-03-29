@@ -33,27 +33,23 @@ connectDB();
 
 // Middleware setup
 app.use(express.json());
-app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  exposedHeaders: ['set-cookie'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-};
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true, // REQUIRED
+    exposedHeaders: ["set-cookie"], // REQUIRED
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+);
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Apply the same CORS options to preflight requests
+app.options("*", cors());
+
+// ✅ Must come before routes
+app.use(cookieParser()); 
 
 // Static files
 const __filename = fileURLToPath(import.meta.url);
