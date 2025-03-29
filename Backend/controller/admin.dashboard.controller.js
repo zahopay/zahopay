@@ -50,7 +50,6 @@ export const AdminLogin = async (req, res) => {
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
       domain: '.onrender.com' ,
       path: "/",
-      partitioned: true
     });
 
     return res.status(200).json({
