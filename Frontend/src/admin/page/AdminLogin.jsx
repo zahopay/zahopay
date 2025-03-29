@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AppContext from "../../context/AppContext";
+import api from '../utils/api.js';
 
 
 const AdminLogin = () => {
@@ -25,49 +26,44 @@ const AdminLogin = () => {
     document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     
     // 2. Make login request
-    const { data } = await axios.post(`${backendUrl}/admin/auth/login`, {
+    const { data } = await api.post('/admin/auth/login', {
       adminEmail,
       adminPassword
-    }, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
-      }
     });
 
     if (data.success) {
-      toast.success("Login successful");
-      
       // 3. Wait for cookie to be processed (critical)
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // 4. Verify session
-      try {
-        const verifyRes = await axios.get(`${backendUrl}/admin/auth/verify`, {
-          withCredentials: true
-        });
-        
-        if (verifyRes.data.success) {
-          // Update auth state
-          setAdminAuthState({
-            isLoggedin: true,
-            adminData: verifyRes.data.admin,
-            isLoading: false
-          });
+      // 4. Verify session with retry logic
+      let attempts = 0;
+      const maxAttempts = 3;
+      
+      while (attempts < maxAttempts) {
+        try {
+          const verifyRes = await api.get('/admin/auth/verify');
           
-          // Navigate to dashboard
-          navigate('/administrator/auth/dashboard');
-        } else {
-          throw new Error("Server verification failed");
+          if (verifyRes.data.success) {
+            // Update state and redirect
+            setAdminAuthState({
+              isLoggedin: true,
+              adminData: verifyRes.data.admin,
+              isLoading: false
+            });
+            return navigate('/administrator/auth/dashboard');
+          }
+        } catch (verifyError) {
+          attempts++;
+          if (attempts >= maxAttempts) {
+            throw new Error('Max verification attempts reached');
+          }
+          await new Promise(resolve => setTimeout(resolve, 500 * attempts));
         }
-      } catch (verifyError) {
-        console.error('Verification error:', verifyError);
-        toast.error('Session verification failed. Please try again.');
       }
     }
   } catch (error) {
     console.error('Login error:', error);
-    toast.error(error.response?.data?.message || 'Login failed');
+    toast.error(error.response?.data?.message || 'Session verification failed. Please try again.');
   }
 };
 
