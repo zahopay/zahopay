@@ -18,40 +18,35 @@ const AdminLogin = () => {
 
 
 const onFormSubmit = async (e) => {
-  e.preventDefault();
-
+   e.preventDefault();
+  
   try {
-    const { data } = await api.post(backendUrl + "/admin/auth/login", {
-      adminEmail,
-      adminPassword,
-    }, {
-      withCredentials: true // Ensure credentials are sent
-    });
-
-
-    if (data?.success) {
-
-
-      // Verify authentication
-      try {
-        const verifyResponse = await api.get(backendUrl + "/admin/auth/verify", {
-          withCredentials: true
-        });
-
-        
-        if (verifyResponse.data.success) {
-          navigate("/administrator/auth/dashboard");
-        } else {
-          throw new Error("Verification failed");
+    // 1. Make login request with credentials
+    const { data } = await axios.post(
+      `${backendUrl}/admin/auth/login`,
+      { adminEmail, adminPassword },
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
         }
-      } catch (verifyError) {
-        console.error("Verification error:", verifyError);
-        throw new Error("Cookie authentication failed");
+      }
+    );
+
+    // 2. If successful, verify the cookie
+    if (data.success) {
+      const verifyRes = await axios.get(
+        `${backendUrl}/admin/auth/verify`,
+        { withCredentials: true }
+      );
+      
+      if (verifyRes.data.success) {
+        navigate("/administrator/auth/dashboard");
       }
     }
   } catch (error) {
-    console.error("Login error:", error);
-    toast.error(error.response?.data?.message || "Login failed");
+    console.error("Login failed:", error);
+    toast.error(error.response?.data?.message || "Authentication failed");
   }
 };
 
