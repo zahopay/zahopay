@@ -26,7 +26,7 @@ const allowedOrigins = [
   'https://zahopay.in',
   'https://api.zahopay.in',
   'https://zahopay.onrender.com',
-  'https://zahopay-frontend.onrender.com/'
+  'https://zahopay-frontend.onrender.com'
 ];
 
 // Connect to database first
@@ -42,7 +42,9 @@ app.use(bodyParser.json());
 const corsOptions = {
   origin: [
     'https://zahopay-frontend.onrender.com',
-    'https://zahopay.in'
+    'https://zahopay.in',
+    'https://zahopay.onrender.com',
+    'https://zahopay-frontend.onrender.com'
   ],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
