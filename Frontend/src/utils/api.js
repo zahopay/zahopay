@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const backendUrl = 'https://zahopay.onrender.com';
+const backendUrl = 'https://api.zahopay.in';
 
 const api = axios.create({
   baseURL: backendUrl,
