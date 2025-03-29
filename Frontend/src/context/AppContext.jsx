@@ -35,7 +35,9 @@ export const AppContextProvider = ({ children }) => {
     const getUserData = async () => {
         try {
         axios.defaults.withCredentials = true;
-        const { data } = await axios.get(backendUrl + "/api/user/data");
+        const { data } = await axios.get(backendUrl + "/api/user/data", {
+            withCredentials: true,
+        });
 
         if (data.success) {
             setUserData(data.userDetials);
