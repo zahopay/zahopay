@@ -54,7 +54,8 @@ app.use(cookieParser())
 const corsOptions = {
   origin: [
     'https://zahopay-frontend.onrender.com',
-    'http://localhost:3000' // for development
+    'https://zahopay.in',
+    'http://localhost:3000' 
   ],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
