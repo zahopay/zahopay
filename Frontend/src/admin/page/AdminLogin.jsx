@@ -22,7 +22,7 @@ const AdminLogin = () => {
   e.preventDefault();
 
   try {
-    const { data } = await api.post("/admin/auth/login", {
+    const { data } = await axios.post("/admin/auth/login", {
       adminEmail,
       adminPassword,
     }, {
@@ -33,7 +33,7 @@ const AdminLogin = () => {
     });
 
     if (data?.success) {
-      const verifyResponse = await api.get("/admin/auth/verify", {
+      const verifyResponse = await axios.get("/admin/auth/verify", {
         withCredentials: true
       });
       
