@@ -48,8 +48,9 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : 'localhost',
+      domain: '.onrender.com' ,
       path: "/",
+      partitioned: true
     });
 
     return res.status(200).json({
@@ -87,7 +88,7 @@ export const verifyAdmin = async (req, res) => {
     });
   } catch (error) {
     res.clearCookie("admin_token", {
-      domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : 'localhost',
+      domain: '.onrender.com',
       path: '/'
     });
     return res.status(401).json({ 
