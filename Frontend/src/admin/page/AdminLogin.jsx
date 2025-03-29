@@ -15,14 +15,9 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   const location = useLocation()
+  
 
-
-const AdminLogin = () => {
-  const [adminEmail, setAdminEmail] = useState("");
-  const [adminPassword, setAdminPassword] = useState("");
-  const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
+  const onFormSubmit = async (e) => {
     e.preventDefault();
     
     try {
