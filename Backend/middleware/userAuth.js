@@ -26,6 +26,10 @@ const userAuth = async (req, res, next) => {
 
     next();
   } catch (error) {
+    res.clearCookie("accessid", {
+            domain: ".zahopay.in",
+            path: "/",
+        });
     res.json({ success: false, message: error.message });
   }
 };
