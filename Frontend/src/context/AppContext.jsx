@@ -30,6 +30,25 @@ export const AppContextProvider = ({ children }) => {
     isLoading: true,
   });
 
+  //get user data
+
+    const getUserData = async () => {
+        try {
+        axios.defaults.withCredentials = true;
+        const { data } = await axios.get(backendUrl + "/api/user/data");
+
+        if (data.success) {
+            setUserData(data.userDetials);
+            setIsLoggedin(true); 
+        } else {
+            toast.error(data.message);
+        }
+        } catch (error) {
+        toast.error(error.message);
+        }
+    };
+
+
 
   const verifyAuth = async () => {
         try {
@@ -38,7 +57,7 @@ export const AppContextProvider = ({ children }) => {
         });
 
         if (response.data.success) {
-            return { success: true, user: response.data.userDetials };
+            await getUserData()
         } else {
             return { success: false };
         }
@@ -65,7 +84,7 @@ export const AppContextProvider = ({ children }) => {
     };
 
 
-// AppContext.js
+
 const verifyAdmin = async () => {
     try {
         const response = await axios.get(`${backendUrl}/admin/auth/verify`, {
