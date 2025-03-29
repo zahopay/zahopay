@@ -6,7 +6,7 @@ import {motion} from "framer-motion"
 
 
 const AdminProtectedRoute = () => {
-const { backendUrl, adminAuthState, setAdminAuthState, verifyAdmin } = useContext(AppContext);
+const { backendUrl, adminAuthState, setAdminAuthState, verifyAdmin, api } = useContext(AppContext);
     const [loading, setLoading] = useState(true);
     const [authChecked, setAuthChecked] = useState(false);
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const { backendUrl, adminAuthState, setAdminAuthState, verifyAdmin } = useContex
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await axios.get(
+                const response = await api.get(
                     `${backendUrl}/admin/auth/verify`,
                     { withCredentials: true }
                 );
