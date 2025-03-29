@@ -31,6 +31,7 @@ const AdminLogin = () => {
       });
 
       if (data.success) {
+        toast.success(data.message)
         // 2. Verify authentication after a brief delay
         setTimeout(async () => {
           try {
