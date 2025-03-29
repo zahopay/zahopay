@@ -87,29 +87,33 @@ export const AppContextProvider = ({ children }) => {
 
 
 const verifyAdmin = async () => {
-    try {
-      const response = await axios.get(`${backendUrl}/admin/auth/verify`, {
-        withCredentials: true
-      });
-      
-      if (response.data.success) {
-        setAdminAuthState({
-          isLoggedin: true,
-          adminData: response.data.admin,
-          isLoading: false
-        });
-        return true;
-      }
-      return false;
-    } catch (error) {
+  try {
+    const response = await axios.get(
+      `${backendUrl}/admin/auth/verify`,
+      { withCredentials: true }
+    );
+    
+    if (response.data.success) {
       setAdminAuthState({
-        isLoggedin: false,
-        adminData: null,
+        isLoggedin: true,
+        adminData: response.data.admin,
         isLoading: false
       });
-      return false;
+    } else {
+      throw new Error("Verification failed");
     }
-  };
+  } catch (error) {
+    setAdminAuthState({
+      isLoggedin: false,
+      adminData: null,
+      isLoading: false
+    });
+    if (location.pathname.startsWith("/administrator")) {
+      navigate("/administrator/adminlogin");
+    }
+  }
+};
+  
 
   useEffect(() => {
     if (window.location.pathname.startsWith('/administrator')) {
