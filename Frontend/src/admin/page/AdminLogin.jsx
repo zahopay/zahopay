@@ -35,22 +35,11 @@ const AdminLogin = () => {
       }
     );
 
-    // 2. Show success message
+    if(data.success){
     toast.success(data.message);
-    
-    // 3. Wait briefly to ensure cookie is processed
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // 4. Verify session
-    const verifyRes = await axios.get(
-      `${backendUrl}/admin/auth/verify`,
-      { withCredentials: true }
-    );
-    
-    // 5. Only navigate if verification succeeds
-    if (verifyRes.data.success) {
-      navigate("/administrator/auth/dashboard");
+    navigate("/administrator/auth/dashboard")
     }
+    
   } catch (error) {
     console.error("Login failed:", error);
     toast.error(error.response?.data?.message || "Authentication failed");
