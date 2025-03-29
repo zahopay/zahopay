@@ -30,33 +30,34 @@ const allowedOrigins = [
 ];
 
 // Corrected CORS middleware (using allowedOrigins)
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    );
-    res.header(
-      'Access-Control-Allow-Methods',
-      'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-    );
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.includes(origin)) {
+//     res.header('Access-Control-Allow-Origin', origin);
+//     res.header('Access-Control-Allow-Credentials', 'true');
+//     res.header(
+//       'Access-Control-Allow-Headers',
+//       'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+//     );
+//     res.header(
+//       'Access-Control-Allow-Methods',
+//       'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+//     );
+//   }
+//   next();
+// });
 
 connectDB();
 app.use(express.json())
 app.use(cookieParser())
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
-  })
-);
+// Replace all CORS-related code with this single middleware:
+app.use(cors({
+  origin: ['https://zahopay-frontend.onrender.com', 'https://zahopay.in'],
+  credentials: true,
+  exposedHeaders: ['set-cookie'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+}));
 app.use(express.urlencoded({extended : true}))
 app.use(bodyParser.json())
 app.options("*", cors());
