@@ -22,23 +22,24 @@ const AdminLogin = () => {
   e.preventDefault();
   
   try {
-    // 1. Make login request with credentials
+    // 1. Make login request
     const { data } = await axios.post(
       `${backendUrl}/admin/auth/login`,
       { adminEmail, adminPassword },
       {
         withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
       }
     );
 
-    // 2. If successful, verify the cookie
+    // 2. Verify session
     if (data.success) {
       const verifyRes = await axios.get(
         `${backendUrl}/admin/auth/verify`,
-        { withCredentials: true }
+        { 
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' }
+        }
       );
       
       if (verifyRes.data.success) {
