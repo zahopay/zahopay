@@ -9,17 +9,24 @@ const AdminProtectedRoute = () => {
 const { backendUrl, adminAuthState, setAdminAuthState, verifyAdmin } = useContext(AppContext);
 const [loading, setLoading] = useState(true);
 
-const [initialCheck, setInitialCheck] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
-      await verifyAdmin();
-      setInitialCheck(true);
+      const isAuthenticated = await verifyAdmin();
+      setAuthChecked(true);
+      
+      if (!isAuthenticated && window.location.pathname.startsWith('/administrator')) {
+        navigate('/administrator/login');
+      }
     };
+    
     checkAuth();
-  }, []);
+  }, [navigate, verifyAdmin]);
 
-if (!initialCheck || adminAuthState.isLoading) {
+
+if (!authChecked || adminAuthState.isLoading) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
