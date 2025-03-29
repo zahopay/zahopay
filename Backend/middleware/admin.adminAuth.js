@@ -1,32 +1,39 @@
 import jwt from "jsonwebtoken";
 
 const adminAuth = (req, res, next) => {
-  const token =
-    req.cookies.admin_token || req.headers.authorization?.split(" ")[1];
+  
+  const token = req.cookies.admin_token;
 
-  if (!token)
-
-    return res.status(401).json({ success: false, message: "Not authorized" });
+  if (!token) {
+    return res.status(401).json({ 
+      success: false, 
+      message: "No authentication token found" 
+    });
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+    
     if (decoded.role !== "admin") {
       return res.status(403).json({
         success: false,
-        message: "Admin access required",
+        message: "Admin privileges required"
       });
     }
 
-    req.admin = { id: decoded.id , token};
-
-    req.body.adminToken = decoded.id;
-
+    req.admin = { id: decoded.id };
     next();
-
+    
   } catch (error) {
-    res.clearCookie("admin_token", { path: "/" , domain : 'zahopay.onrender.com',});
-    res.status(401).json({ success: false, message: "Invalid token" });
+    console.error("JWT verification failed:", error);
+    res.clearCookie("admin_token", {
+      domain: 'zahopay.onrender.com',
+      path: '/'
+    });
+    return res.status(401).json({ 
+      success: false,
+      message: "Invalid or expired session"
+    });
   }
 };
 
