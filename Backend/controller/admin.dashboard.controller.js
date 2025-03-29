@@ -42,33 +42,37 @@ export const AdminLogin = async (req, res) => {
       { expiresIn: "8h" }
     );
 
-    // Set cookie with proper configuration
+    // COOKIE SETTINGS THAT WILL WORK
     res.cookie("admin_token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: 'none', // MUST BE 'none' for cross-site
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      domain: 'zahopay.in' ,
-      path: "/",
+      domain: '.onrender.com', // LEADING DOT IS CRUCIAL
+      path: "/"
     });
 
     return res.status(200).json({
       success: true,
-      admin: { id: admin._id, email: admin.adminEmail },
+      message: "Login successful",
+      admin: { id: admin._id, email: admin.adminEmail }
     });
+
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Internal server error"
     });
   }
 };
 
+
 export const verifyAdmin = async (req, res) => {
   try {
-    const token = req.cookies.admin_token;
+    console.log("Incoming cookies:", req.cookies); // Debug
     
+    const token = req.cookies.admin_token;
     if (!token) {
       return res.status(401).json({ 
         success: false,
@@ -77,17 +81,14 @@ export const verifyAdmin = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
     return res.json({ 
       success: true,
-      admin: { 
-        id: decoded.id,
-        email: decoded.email 
-      }
+      admin: { id: decoded.id }
     });
+    
   } catch (error) {
     res.clearCookie("admin_token", {
-      domain: 'zahopay.in',
+      domain: '.onrender.com',
       path: '/'
     });
     return res.status(401).json({ 
@@ -96,7 +97,6 @@ export const verifyAdmin = async (req, res) => {
     });
   }
 };
-
 
 export const adminLogout = (req, res) => {
     res.clearCookie("admin_token", { path: "/" , domain : 'zahopay.in',});
