@@ -25,7 +25,7 @@ const AdminLogin = () => {
       document.cookie = 'admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       
       // 1. Make login request
-      const { data } = await api.post('/admin/auth/login', {
+      const { data } = await axios.post('/admin/auth/login', {
         adminEmail,
         adminPassword
       });
