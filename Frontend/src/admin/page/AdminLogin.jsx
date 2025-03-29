@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AppContext from "../../context/AppContext";
-import api from '../utils/api.js';
+import api from '../../utils/api.js'; 
 
 
 const AdminLogin = () => {
