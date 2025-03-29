@@ -48,7 +48,7 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: 'none', // MUST BE 'none' for cross-site
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      domain: 'zahopay.in', // LEADING DOT IS CRUCIAL
+      domain: '.zahopay.in', // LEADING DOT IS CRUCIAL
       path: "/",
       partitioned: true 
     });
@@ -70,27 +70,29 @@ export const AdminLogin = async (req, res) => {
 
 
 export const verifyAdmin = async (req, res) => {
-  try {
-    const admin_token = req.cookies.admin_token; // Read from cookies
-    
-    if (!admin_token) {
-      return res.status(401).json({ success: false, message: "No authentication token found" });
-    }
+    console.log("verifyAdmin cookies:", req.cookies);
+    console.log("verifyAdmin admin_token:", req.cookies.admin_token);
+    console.log("verifyAdmin headers:", req.headers);
 
-    return res.json({
-      success: true,
-      admin: { token: admin_token },
-    });
-    
-  } catch (error) {
-    res.clearCookie("admin_token", { path: "/", domain: "zahopay.in" });
-    return res.status(500).json({ success: false });
-  }
+    try {
+        const admin_token = req.cookies.admin_token;
+        if (!admin_token) {
+            return res.status(401).json({ success: false, message: "No authentication token found" });
+        }
+
+        return res.json({
+            success: true,
+            admin: { token: admin_token },
+        });
+    } catch (error) {
+        res.clearCookie("admin_token", { path: "/", domain: ".zahopay.in" });
+        return res.status(500).json({ success: false });
+    }
 };
 
 
 export const adminLogout = (req, res) => {
-    res.clearCookie("admin_token", { path: "/" , domain :  'zahopay.in',});
+    res.clearCookie("admin_token", { path: "/" , domain :  '.zahopay.in',});
   res.json({ success: true, message: "Logged out" });
 };
 
