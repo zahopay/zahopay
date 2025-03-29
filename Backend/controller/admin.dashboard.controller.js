@@ -75,21 +75,37 @@ export const AdminLogin = async (req, res) => {
 
 export const verifyAdmin = async (req, res) => {
   try {
-    const token = req.cookies.admin_token;
+    console.log('Received cookies:', req.cookies); // Debug log
+    
+    const token = req.cookies.admin_token || req.headers.authorization?.split(' ')[1];
     
     if (!token) {
+      console.log('No token found');
       return res.status(401).json({ success: false });
     }
 
-    // Verify token and return minimal admin data
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    return res.json({ success: true, admin: { id: decoded.id } });
+    console.log('Decoded token:', decoded); // Debug log
+    
+    return res.json({ 
+      success: true, 
+      admin: { 
+        id: decoded.id,
+        email: decoded.email || null 
+      } 
+    });
     
   } catch (error) {
-    res.clearCookie("admin_token");
+    console.error('Verify error:', error);
+    res.clearCookie("admin_token", {
+      domain: '.onrender.com',
+      path: '/'
+    });
     return res.status(401).json({ success: false });
   }
 };
+
+
 
 export const adminLogout = (req, res) => {
     res.clearCookie("admin_token", { path: "/" , domain : 'zahopay.onrender.com',});
