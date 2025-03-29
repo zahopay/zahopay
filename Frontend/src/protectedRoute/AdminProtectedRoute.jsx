@@ -42,5 +42,4 @@ if (!initialCheck || adminAuthState.isLoading) {
   );
 };
 
-}
 export default AdminProtectedRoute;
