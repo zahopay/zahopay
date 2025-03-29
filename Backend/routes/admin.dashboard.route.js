@@ -30,7 +30,7 @@ adminDashboardRoute.get("/get-all-purchase", adminAuth, getAllPurchase);
 
 //admin auth
 
-adminDashboardRoute.get("/verify", adminAuth, verifyAdmin);
+adminDashboardRoute.get("/verify", verifyAdmin);
 
 
 // all user page
