@@ -39,13 +39,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // CORS configuration
-app.use(cors({
-  origin: allowedOrigins,
+const corsOptions = {
+  origin: [
+    'https://zahopay-frontend.onrender.com',
+    'https://zahopay.in'
+  ],
   credentials: true,
-  exposedHeaders: ['set-cookie'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
-}));
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); 
 
 
 
