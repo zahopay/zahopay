@@ -9,7 +9,7 @@ const AdminLogin = () => {
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
 
-  const { backendUrl, setAdminAuthState, api } =
+  const { backendUrl, setAdminAuthState, api, verifyAdmin } =
     useContext(AppContext);
 
   const navigate = useNavigate();
@@ -39,10 +39,10 @@ const AdminLogin = () => {
         // 2. Verify authentication after a brief delay
         setTimeout(async () => {
           try {
-            const verifyRes = await api.get('/admin/auth/verify');
+            const verifyRes = await verifyAdmin()
             
             // 3. Only navigate if verification succeeds
-            if (verifyRes.data.success) {
+            if (verifyRes) {
               navigate('/administrator/auth/dashboard', { replace: true });
             } else {
               toast.error('Authentication verification failed');
