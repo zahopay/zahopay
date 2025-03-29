@@ -53,7 +53,7 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: 'zahopay.onrender.com',
+      domain: '.onrender.com',
       path: "/",
     });
 
@@ -108,7 +108,7 @@ export const verifyAdmin = async (req, res) => {
 
 
 export const adminLogout = (req, res) => {
-    res.clearCookie("admin_token", { path: "/" , domain : 'zahopay.onrender.com',});
+    res.clearCookie("admin_token", { path: "/" , domain : '.onrender.com',});
   res.json({ success: true, message: "Logged out" });
 };
 
