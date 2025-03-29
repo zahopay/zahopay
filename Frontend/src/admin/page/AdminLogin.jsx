@@ -42,8 +42,6 @@ const onFormSubmit = async (e) => {
       'Content-Type': 'application/json'
          } 
         },);
-
-      console.log(verifyRes.data.success)
       
       if (verifyRes.data.success) {
         navigate("/administrator/auth/dashboard");
