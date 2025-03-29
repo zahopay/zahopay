@@ -33,8 +33,9 @@ const AdminLogin = () => {
       });
 
       if (data.success) {
+        toast.success(data.message)
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        window.location.href = "/administrator/dashboard";
+        window.location.href = "/administrator/auth/dashboard";
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
