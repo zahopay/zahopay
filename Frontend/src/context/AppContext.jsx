@@ -86,43 +86,22 @@ export const AppContextProvider = ({ children }) => {
     };
 
 
+// AppContext.js
 const verifyAdmin = async () => {
-  try {
-    const response = await axios.get(
-      `${backendUrl}/admin/auth/verify`,
-      { 
-        withCredentials: true,
-        headers: {
-          'Accept': 'application/json'
-        }
-      }
-    );
-    
-    if (response.data.success) {
-      setAdminAuthState({
-        isLoggedin: true,
-        adminData: response.data.admin,
-        isLoading: false
-      });
-      return true;
-    }
-    throw new Error("Verification failed");
-  } catch (error) {
-    setAdminAuthState({
-      isLoggedin: false,
-      adminData: null,
-      isLoading: false
-    });
-    return false;
-  }
-};
-  
+    try {
+        const response = await axios.get(`${backendUrl}/admin/auth/verify`, {
+            withCredentials: true,
+        });
 
-  useEffect(() => {
-    if (window.location.pathname.startsWith('/administrator')) {
-      verifyAdmin();
+        if (response.data.success) {
+            return { success: true, admin: response.data.admin };
+        } else {
+            return { success: false };
+        }
+    } catch (error) {
+        return { success: false };
     }
-  }, []);
+};
 
 
   useEffect(() => {
