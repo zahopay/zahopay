@@ -16,7 +16,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   const location = useLocation()
-  
+
 
   const onFormSubmit = async (e) => {
   e.preventDefault();
@@ -28,22 +28,36 @@ const AdminLogin = () => {
       { adminEmail, adminPassword },
       {
         withCredentials: true,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
       }
     );
 
-    // 2. Verify session
-    if (data.success) {
-      toast.success(data.message);
-      navigate("/administrator/auth/dashboard");      
+    // 2. Show success message
+    toast.success(data.message);
+    
+    // 3. Wait briefly to ensure cookie is processed
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // 4. Verify session
+    const verifyRes = await axios.get(
+      `${backendUrl}/admin/auth/verify`,
+      { withCredentials: true }
+    );
+    
+    // 5. Only navigate if verification succeeds
+    if (verifyRes.data.success) {
+      navigate("/administrator/auth/dashboard");
     }
   } catch (error) {
     console.error("Login failed:", error);
     toast.error(error.response?.data?.message || "Authentication failed");
   }
 };
-  
-  return (
+
+    return (
     <div className="h-lvh">
       <div className="w-[100%] flex justify-center items-center bg-blue-900 h-full">
         <form
