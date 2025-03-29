@@ -29,43 +29,27 @@ const allowedOrigins = [
   'https://zahopay.in'
 ];
 
-// Corrected CORS middleware (using allowedOrigins)
-// app.use((req, res, next) => {
-//   const origin = req.headers.origin;
-//   if (allowedOrigins.includes(origin)) {
-//     res.header('Access-Control-Allow-Origin', origin);
-//     res.header('Access-Control-Allow-Credentials', 'true');
-//     res.header(
-//       'Access-Control-Allow-Headers',
-//       'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-//     );
-//     res.header(
-//       'Access-Control-Allow-Methods',
-//       'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-//     );
-//   }
-//   next();
-// });
+
 
 connectDB();
 app.use(express.json())
 app.use(cookieParser())
 // Replace all CORS-related code with this single middleware:
-const corsOptions = {
-  origin: [
-    'https://zahopay-frontend.onrender.com',
-    'https://zahopay.in',
-    'http://localhost:3000' 
-  ],
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
+  exposedHeaders: ['set-cookie'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-};
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+app.options('*', cors()); 
 app.use(express.urlencoded({extended : true}))
 app.use(bodyParser.json())
 
