@@ -25,7 +25,7 @@ const adminAuth = (req, res, next) => {
     next();
 
   } catch (error) {
-    res.clearCookie("admin_token", { path: "/" , '.onrender.com'});
+    res.clearCookie("admin_token", { path: "/" , domain : '.onrender.com'});
     res.status(401).json({ success: false, message: "Invalid token" });
   }
 };
