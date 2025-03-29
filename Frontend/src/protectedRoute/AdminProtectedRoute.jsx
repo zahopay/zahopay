@@ -6,10 +6,21 @@ import {motion} from "framer-motion"
 
 
 const AdminProtectedRoute = () => {
-const { backendUrl, adminAuthState, setAdminAuthState } = useContext(AppContext);
+const { backendUrl, adminAuthState, setAdminAuthState, verifyAdmin } = useContext(AppContext);
 const [loading, setLoading] = useState(true);
 
-if (adminAuthState.isLoading) return (
+const [initialCheck, setInitialCheck] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      await verifyAdmin();
+      setInitialCheck(true);
+    };
+    checkAuth();
+  }, []);
+
+if (!initialCheck || adminAuthState.isLoading) {
+    return (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -22,12 +33,14 @@ if (adminAuthState.isLoading) return (
         ></motion.div>
       </motion.div>
     );
+  }
 
-return adminAuthState.isLoggedin ? (
-  <Outlet />
-) : (
-  <Navigate to="/administrator/adminlogin" replace />
-);
+  return adminAuthState.isLoggedin ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/administrator/adminlogin" replace />
+  );
+};
 
 }
 export default AdminProtectedRoute;
