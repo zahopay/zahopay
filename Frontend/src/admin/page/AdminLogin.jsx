@@ -18,30 +18,34 @@ const AdminLogin = () => {
   const location = useLocation()
   
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const onFormSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      // ✅ 1. Clear existing cookies
-      document.cookie =
-        "admin_token=; domain=.onrender.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-
-      // ✅ 2. Make login request
-      const { data } = await api.post("/admin/auth/login", {
-        adminEmail,
-        adminPassword,
-      });
-
-      if (data.success) {
-        toast.success(data.message)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        window.location.href = "/administrator/auth/dashboard";
+  try {
+    const { data } = await api.post("/admin/auth/login", {
+      adminEmail,
+      adminPassword,
+    }, {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
       }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
-    }
-  };
+    });
 
+    if (data?.success) {
+      const verifyResponse = await api.get("/admin/auth/verify", {
+        withCredentials: true
+      });
+      
+      if (verifyResponse.data.success) {
+        navigate("/administrator/auth/dashboard");
+      }
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    toast.error(error.response?.data?.message || "Login failed");
+  }
+};
 
   
   return (
@@ -49,7 +53,7 @@ const AdminLogin = () => {
       <div className="w-[100%] flex justify-center items-center bg-blue-900 h-full">
         <form
           className="border w-[400px] bg-white px-8 py-6 rounded-md flex flex-col gap-4"
-          onSubmit={handleLogin}
+          onSubmit={onFormSubmit}
         >
           <div>
             <h1 className="text-2xl text-center">Welcome Back Admin </h1>
