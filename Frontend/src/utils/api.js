@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://zahopay.onrender.com';
+const backendUrl = 'https://zahopay.onrender.com';
 
 const api = axios.create({
   baseURL: backendUrl,
