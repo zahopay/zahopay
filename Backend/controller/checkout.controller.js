@@ -58,12 +58,15 @@ export const submitPaymentSuccess = async(req, res) => {
             return res.json({success : false, message : "UTR Number Required"})
         }
 
-        const host = req.get("host");
-        const protocol = req.protocol;
 
+        const host = req.get('host');
+        const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+        
         const paymentScreenshot = req.file
-    ? `${protocol}://${host}/uploads/${req.file.path.replace(/^\/mnt\/uploads[\\/]/, "")}`
-    : null;
+          ? `https://${host}/uploads/${req.file.path
+              .replace(/^\/mnt\/uploads[\\/]/, '')  // Remove absolute path
+              .replace(/\\/g, '/')}`               // Normalize path separators
+          : null;
         
         if(!paymentScreenshot){
             return res.json({success : false, message : "Payment Screenshot Is Required"})
