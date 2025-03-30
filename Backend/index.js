@@ -61,7 +61,12 @@ app.options('*', cors(corsOptions));
 // Static files
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-app.use("/uploads", express.static(join(__dirname, 'uploads'))); // Better path handling
+
+const uploadsPath = process.env.NODE_ENV === 'production' 
+  ? '/mnt/uploads' 
+  : join(__dirname, 'uploads');
+
+app.use("/uploads", express.static(uploadsPath));
 
 // Basic route
 app.get("/", (req, res) => {
