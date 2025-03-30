@@ -6,50 +6,55 @@ import {motion} from "framer-motion"
 
 
 const ProtectedRoute = () => {
-  const { setUserData, userData, setAuthState, backendUrl, authState } = useContext(AppContext);
+
+  const { setAuthState, backendUrl, authState, setUserData, userData } = useContext(AppContext);
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
-  console.log("userData Protected Route : ", userData)
+   console.log("userData Protected Route : ", userData)
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(
-          `${backendUrl}/api/auth/is-auth`,
-          { 
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }
-          }
-        );
+    let isMounted = true; // Track mounted state
 
-        if (response.data.success) {
+    const verifyAuth = async () => {
+      try {
+        const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        });
+
+        if (isMounted && data?.success && data.isAuthenticated) {
           setAuthState({
             isLoggedin: true,
-            userData: response.data.userDetails,
-            isLoading: false,
+            userData: data.userDetails,
+            isLoading: false
           });
-          setUserData(response.data.userDetails);
+          setUserData(data.userDetails)
         } else {
-          throw new Error('Not authenticated');
+          throw new Error(data?.message || 'Not authenticated');
         }
       } catch (error) {
-        setAuthState({
-          isLoggedin: false,
-          userData: null,
-          isLoading: false
-        });
-        navigate('/login');
+        if (isMounted) {
+          setAuthState({
+            isLoggedin: false,
+            userData: null,
+            isLoading: false
+          });
+          setUserData(null)
+          navigate('/login');
+        }
       } finally {
-        setAuthChecked(true);
+        if (isMounted) setAuthChecked(true);
       }
     };
 
-    checkAuth();
-  }, [navigate, backendUrl, setAuthState, setUserData]);
+    verifyAuth();
+
+    return () => { isMounted = false }; 
+  }, [navigate, backendUrl, setAuthState]);
 
   if (!authChecked) {
     return (
