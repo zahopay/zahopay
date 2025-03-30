@@ -221,8 +221,6 @@ export const isAuthenticted = async (req, res) => {
 
     const user = await userModel.findById(userId).select('-password');
 
-    console.log("Is Auth User userDetails", user)
-
     return res.json({ success: true, userDetails: user });
     
   } catch (error) {
