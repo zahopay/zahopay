@@ -30,65 +30,48 @@ export const AppContextProvider = ({ children }) => {
     isLoading: true,
   });
 
-  //get user data
+  const getUserData = async () => {
+  try {
+    const { data } = await axios.get(`${backendUrl}/api/user/data`, {
+      withCredentials: true,
+    });
 
-    const getUserData = async () => {
-        try {
-        axios.defaults.withCredentials = true;
-        const { data } = await axios.get(backendUrl + "/api/user/data", {
-            withCredentials: true,
-        });
-
-        if (data.success) {
-            setUserData(data.userDetials);
-          setAuthState({
-            isLoggedin: true,
-            userData: data.userDetails,
-            isLoading: false,
-          })
-          return true
-        } else {
-            toast.error(data.message);
-           setAuthState({
-            isLoggedin: false,
-            userData: null,
-            isLoading: false,
-          })
-          setUserData(null);
-          return false
-        }
-        } catch (error) {
-            setAuthState({
-            isLoggedin: false,
-            userData: null,
-            isLoading: false,
-          })
-          setUserData(null);
-        toast.error(error.message);
-          return false
-        }
-    };
-
-
-
-  const verifyAuth = async () => {
-        try {
-        const response = await axios.get(`${backendUrl}/api/auth/is-auth`, {
-            withCredentials: true,
-        });
-
-        if (response.data.success) {
-           const isAuth = await getUserData()
-          if(isAuth){
-            return true
-          }
-        } else {
-          return false
-        }
-    } catch (error) {
-          console.log(error.message);
-          return false
+    if (data.success) {
+      setUserData(data.userDetails); // Fixed typo
+      setAuthState({
+        isLoggedin: true,
+        userData: data.userDetails, // Fixed typo
+        isLoading: false,
+      });
+      return true;
     }
+    throw new Error(data.message || "Failed to get user data");
+  } catch (error) {
+    setAuthState({
+      isLoggedin: false,
+      userData: null,
+      isLoading: false,
+    });
+    setUserData(null);
+    toast.error(error.message);
+    return false;
+  }
+};
+
+const verifyAuth = async () => {
+  try {
+    const response = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+      withCredentials: true,
+    });
+    
+    if (response.data.success) {
+      return await getUserData();
+    }
+    return false;
+  } catch (error) {
+    console.error("Auth verification failed:", error.message);
+    return false;
+  }
 };
 
     const logoutAdmin = async () => {
