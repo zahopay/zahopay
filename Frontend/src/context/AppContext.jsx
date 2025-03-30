@@ -183,6 +183,7 @@ api.interceptors.response.use(
     sendVerificationOtp,
     authState,
     verifyAuth,
+    setAuthState,
     adminAuthState,
     setAdminAuthState,
     frontendUrl,
