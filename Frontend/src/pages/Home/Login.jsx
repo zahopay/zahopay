@@ -23,7 +23,7 @@ const Login = () => {
 
  async function onFormSubmit(e) {
   e.preventDefault();
-  console.log('Login form submitted');
+
 
   try {
     console.log('Making login request...');
@@ -41,7 +41,7 @@ const Login = () => {
 
     if (data.success) {
       toast.success(data.message);
-      console.log('Login successful, updating state');
+
       
       // Update state immediately with received data
       setAuthState({
@@ -51,14 +51,14 @@ const Login = () => {
       });
       setUserData(data.userDetails)
 
-      console.log('State updated, navigating to dashboard');
+
       navigate("/user/dashboard");
       
     } else {
       throw new Error(data.message || 'Login failed');
     }
   } catch (error) {
-    console.error('Login error:', error);
+
     toast.error(error.response?.data?.message || error.message || "Login failed");
     setAuthState({
       isLoggedin: false,
