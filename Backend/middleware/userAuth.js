@@ -8,33 +8,50 @@ const userAuth = async (req, res, next) => {
   console.log('Request headers:', req.headers);
 
   if (!token) {
-    return res.json({
+    console.log('No token found in cookies');
+    return res.status(401).json({
       success: false,
-      message: "Not Authorized Login Again",
+      isAuthenticated: false,
+      message: "Not authorized - no token"
     });
   }
 
   try {
     const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
-
-
-    if (tokenDecoded.id) {
-      req.body.userId = tokenDecoded.id;
-    } 
-    else {
-      return res.json({
+    
+    if (!tokenDecoded?.id) {
+      console.log('Token decoded but missing ID');
+      return res.status(401).json({
         success: false,
-        message: "Not Authorized Login Again",
+        isAuthenticated: false,
+        message: "Invalid token structure"
       });
     }
 
+    // Verify user exists in database
+    const userExists = await userModel.exists({ _id: tokenDecoded.id });
+    if (!userExists) {
+      console.log('User not found in database');
+      return res.status(404).json({
+        success: false,
+        isAuthenticated: false,
+        message: "User not found"
+      });
+    }
+
+    req.body.userId = tokenDecoded.id;
     next();
   } catch (error) {
+    console.log('Token verification failed:', error.message);
     res.clearCookie("accessid", {
-            domain: ".zahopay.in",
-            path: "/",
-        });
-    res.json({ success: false, message: error.message });
+      domain: ".zahopay.in",
+      path: "/",
+    });
+    return res.status(401).json({
+      success: false,
+      isAuthenticated: false,
+      message: "Session expired"
+    });
   }
 };
 
