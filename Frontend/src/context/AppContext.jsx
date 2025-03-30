@@ -41,6 +41,11 @@ export const AppContextProvider = ({ children }) => {
 
         if (data.success) {
             setUserData(data.userDetials);
+          setAuthState({
+            isLoggedin: true,
+            userData: data.userDetails,
+            isLoading: false,
+          })
         } else {
             toast.error(data.message);
         }
