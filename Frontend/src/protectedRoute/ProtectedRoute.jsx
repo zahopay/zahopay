@@ -19,16 +19,24 @@ console.log('Auth state after update:', authState);
 
   useEffect(() => {
     let isMounted = true;
+    console.log('ProtectedRoute mounting - checking auth...');
 
-    const verifySession = async () => {
+    const verifyAuth = async () => {
       try {
-        const { data } = await axios.get(
-          `${backendUrl}/api/auth/is-auth`,
-          { withCredentials: true }
-        );
+        console.log('Making is-auth request to:', `${backendUrl}/api/auth/is-auth`);
+        const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+          withCredentials: true,
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
 
+        console.log('Auth response:', data);
+        
         if (isMounted) {
           if (data?.isAuthenticated) {
+            console.log('Authentication successful, updating state');
             setAuthState({
               isLoggedin: true,
               userData: data.userDetails,
@@ -36,10 +44,12 @@ console.log('Auth state after update:', authState);
             });
             setUserData(data.userDetails)
           } else {
+            console.log('Authentication failed, redirecting to login');
             throw new Error(data?.message || 'Not authenticated');
           }
         }
       } catch (error) {
+        console.error('Auth check error:', error);
         if (isMounted) {
           setAuthState({
             isLoggedin: false,
@@ -47,17 +57,24 @@ console.log('Auth state after update:', authState);
             isLoading: false
           });
           setUserData(null)
-          navigate('/login');
+          navigate('/login', { state: { from: location.pathname } });
         }
       } finally {
-        if (isMounted) setAuthChecked(true);
+        if (isMounted) {
+          console.log('Auth check complete');
+          setAuthChecked(true);
+        }
       }
     };
 
-    verifySession();
+    verifyAuth();
 
-    return () => { isMounted = false };
-  }, [navigate, backendUrl, setAuthState]);
+    return () => {
+      console.log('ProtectedRoute unmounting');
+      isMounted = false;
+    };
+  }, [navigate, backendUrl, setAuthState, location]);
+  
 
   if (!authChecked) {
     return (
