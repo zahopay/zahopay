@@ -20,33 +20,34 @@ const Login = () => {
   } = useContext(AppContext);
 
   async function onFormSubmit(e) {
-    try {
-      e.preventDefault();
+  try {
+    e.preventDefault();
+    const { data } = await axios.post(
+      `${backendUrl}/api/auth/login`,
+      { email, password },
+      { withCredentials: true }
+    );
 
-      try {
-        const { data } = await axios.post(backendUrl + "/api/auth/login", {
-          email,
-          password,
-        }, {
-        withCredentials: true,
+    if (data.success) {
+      toast.success(data.message);
+      
+      // Immediately update state with the data we got from login
+      setAuthState({
+        isLoggedin: true,
+        userData: data.userDetails,
+        isLoading: false,
       });
-
-       if (data.success) {
-          toast.success(data.message);
-         const verifyIsAuth = await verifyAuth()
-         if(verifyIsAuth){
-         navigate("/user/dashboard")
-        }
-  } else {
-          toast.error(data.message);
-        }
-      } catch (error) {
-        toast.error(error.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
+      setUserData(data.userDetails);
+      
+      // Then navigate
+      navigate("/user/dashboard");
+    } else {
+      toast.error(data.message);
     }
+  } catch (error) {
+    toast.error(error.response?.data?.message || error.message || "Login failed");
   }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center p-4">
