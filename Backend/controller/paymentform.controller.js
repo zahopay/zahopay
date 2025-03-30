@@ -29,6 +29,8 @@ export const addNewPaymentForm = async (req, res) => {
     ? `${protocol}://${host}/uploads/${req.file.path.replace(/^\/mnt\/uploads[\\/]/, "")}`
     : null;
 
+    const userObjectId = new mongoose.Types.ObjectId(userId)
+
     const newPaymentForm = new paymentModel({
       title,
       price,
@@ -37,7 +39,7 @@ export const addNewPaymentForm = async (req, res) => {
       redirectUrl,
       logoImage,
       facebookPixel,
-      userId,
+      userId : userObjectId,
       customerForm: {
         name: name === "disable" ? null : name,
         phone: phone === "disable" ? null : phone,
