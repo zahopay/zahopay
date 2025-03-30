@@ -27,21 +27,16 @@ const Login = () => {
     const { data } = await axios.post(
       `${backendUrl}/api/auth/login`,
       { email, password },
-      { withCredentials: true }
+      { withCredentials: true, 
+       headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        } 
+      }
     );
 
     if (data.success) {
       toast.success(data.message);
-      
-      // Immediately update state with the data we got from login
-      setAuthState({
-        isLoggedin: true,
-        userData: data.userDetails,
-        isLoading: false,
-      });
-      setUserData(data.userDetails);
-      
-      // Then navigate
       navigate("/user/dashboard");
     } else {
       toast.error(data.message);
