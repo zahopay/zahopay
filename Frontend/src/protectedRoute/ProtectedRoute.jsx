@@ -21,7 +21,7 @@ const ProtectedRoute = () => {
                 if (response.data.success) {
                     setAuthState({
                         isLoggedin: true,
-                        userData: response.data.admin,
+                        userData: response.data.userDetails,
                         isLoading: false,
                     });
                 } else {
