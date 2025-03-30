@@ -37,12 +37,16 @@ export const handleUserPlanSumbit = async(req, res) => {
             return res.json({success : false, message : "Transaction ID required"})
         }
 
-        const host = req.get("host");
-        const protocol = req.protocol;
 
+        const host = req.get("host");
+        const protocol = req.headers['x-forwarded-proto'] || req.protocol;  // Prefer x-forwarded-proto if available
+        
+        // Generate secure image URL
         const paymentScreenshot = req.file
-    ? `${protocol}://${host}/uploads/${req.file.path.replace(/^\/mnt\/uploads[\\/]/, "")}`
-    : null;
+        ? `https://${host}/uploads/${req.file.path
+          .replace(/^\/mnt\/uploads[\\/]/, "")  
+          .replace(/\\/g, "/")}`                
+        : null;
 
 
         if(!paymentScreenshot){
