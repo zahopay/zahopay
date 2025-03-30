@@ -70,9 +70,7 @@ export const AdminLogin = async (req, res) => {
 
 
 export const verifyAdmin = async (req, res) => {
-    console.log("verifyAdmin cookies:", req.cookies);
-    console.log("verifyAdmin admin_token:", req.cookies.admin_token);
-    console.log("verifyAdmin headers:", req.headers);
+
 
     try {
         const admin_token = req.cookies.admin_token;
