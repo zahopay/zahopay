@@ -26,8 +26,8 @@ export const addNewPaymentForm = async (req, res) => {
     const protocol = req.protocol;
 
     const logoImage = req.file
-    ? `${protocol}://${host}/uploads/${req.file.path.replace(/^\/mnt\/uploads[\\/]/, "")}`
-    : null;
+  ? `${protocol}://${host}/uploads/paymentform/logo/${req.file.filename}`
+  : null;
 
     const userObjectId = new mongoose.Types.ObjectId(userId)
 
