@@ -24,6 +24,7 @@ const { setUserData, setAuthState, backendUrl,authState } = useContext(AppContex
                         userData: response.data.userDetails,
                         isLoading: false,
                     });
+                  setUserData(response.data.userDetails)
                 } else {
                     navigate('/login');
                 }
