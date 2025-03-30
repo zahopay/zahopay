@@ -24,6 +24,7 @@ const ProtectedRoute = () => {
                         userData: response.data.userDetails,
                         isLoading: false,
                     });
+                  await verifyAuth()
                 } else {
                     navigate('/login');
                 }
