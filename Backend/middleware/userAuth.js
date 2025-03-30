@@ -2,55 +2,51 @@ import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
   
+  console.log('Incoming cookies:', req.cookies); // Debug
+  
   const token = req.cookies.accessid;
-
-  console.log('Incoming cookies:', req.cookies);
-  console.log('Request headers:', req.headers);
-
+  
   if (!token) {
-    console.log('No token found in cookies');
-    return res.status(401).json({
+    console.log('No token found');
+    return res.status(401).json({ 
       success: false,
       isAuthenticated: false,
-      message: "Not authorized - no token"
+      message: "Missing authentication token" 
     });
   }
 
   try {
-    const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded token:', decoded); // Debug
     
-    if (!tokenDecoded?.id) {
-      console.log('Token decoded but missing ID');
+    // Verify user exists
+    const user = await userModel.findById(decoded.id);
+    if (!user) {
+      console.log('User not found');
       return res.status(401).json({
-        success: false,
-        isAuthenticated: false,
-        message: "Invalid token structure"
-      });
-    }
-
-    // Verify user exists in database
-    const userExists = await userModel.exists({ _id: tokenDecoded.id });
-    if (!userExists) {
-      console.log('User not found in database');
-      return res.status(404).json({
         success: false,
         isAuthenticated: false,
         message: "User not found"
       });
     }
 
-    req.body.userId = tokenDecoded.id;
+    req.user = user; 
+    
     next();
   } catch (error) {
-    console.log('Token verification failed:', error.message);
+    console.error('Token verification failed:', error.message);
+    
     res.clearCookie("accessid", {
       domain: ".zahopay.in",
       path: "/",
     });
+    
     return res.status(401).json({
       success: false,
       isAuthenticated: false,
-      message: "Session expired"
+      message: error.message.includes('jwt expired') 
+        ? "Session expired" 
+        : "Invalid token"
     });
   }
 };
