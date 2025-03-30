@@ -26,7 +26,6 @@ const Login = () => {
 
 
   try {
-    console.log('Making login request...');
     const { data } = await axios.post(
       `${backendUrl}/api/auth/login`,
       { email, password },
