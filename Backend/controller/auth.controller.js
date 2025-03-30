@@ -216,41 +216,34 @@ export const verifyAccount = async (req, res) => {
 };
 
 export const isAuthenticted = async (req, res) => {
-try {
+ try {
     const { userId } = req.body;
 
     if (!userId) {
       return res.status(401).json({ 
-        success: false, 
-        message: "User ID not provided" 
+        success: false,
+        isAuthenticated: false,
+        message: "User ID required" 
       });
     }
 
     const user = await userModel.findById(userId).select('-password');
-
-    if (!user) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "User not found" 
-      });
-    }
-
-    // Return consistent response structure
-    return res.status(200).json({ 
+    
+    return res.status(200).json({
       success: true,
       isAuthenticated: true,  // Explicit flag
-      userDetails: user,
-      message: "User authenticated"
+      userDetails: user,      // Full user details
+      message: "Authenticated"
     });
     
   } catch (error) {
-    console.error("Authentication error:", error);
-    return res.status(500).json({ 
-      success: false, 
-      message: error.message 
+    res.clearCookie("accessid");
+    return res.status(401).json({
+      success: false,
+      isAuthenticated: false,
+      message: error.message
     });
   }
-};
 
 
 // Add this endpoint (fix your isAuthenticated typo)
