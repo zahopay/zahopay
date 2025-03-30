@@ -23,8 +23,9 @@ const Login = () => {
   console.log("UserData Login Page : ", userData)
 
   async function onFormSubmit(e) {
+  e.preventDefault();
+  
   try {
-    e.preventDefault();
     const { data } = await axios.post(
       `${backendUrl}/api/auth/login`,
       { email, password },
@@ -38,35 +39,34 @@ const Login = () => {
     );
 
     if (data.success) {
-      // Immediately update state with user data
-      setAuthState({
-        isLoggedin: true,
-        userData: data.userDetails,
-        isLoading: false
+      // Immediately verify the session
+      const authResponse = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+        withCredentials: true
       });
-      setUserData(data.userDetails);
-      
-      toast.success(data.message);
-      
-      // Verify auth before navigation
-      try {
-        const authResponse = await axios.get(`${backendUrl}/api/auth/is-auth`, {
-          withCredentials: true
+
+      if (authResponse.data?.success) {
+        setAuthState({
+          isLoggedin: true,
+          userData: authResponse.data.userDetails,
+          isLoading: false
         });
-        
-        if (authResponse.data.success) {
-          navigate("/user/dashboard");
-        } else {
-          throw new Error('Verification failed');
-        }
-      } catch (verifyError) {
-        toast.error('Session verification failed');
+        setUserData(authResponse.data.userDetails)
+        toast.success(data.message);
+        navigate("/user/dashboard");
+      } else {
+        throw new Error('Session verification failed');
       }
     } else {
-      toast.error(data.message);
+      throw new Error(data.message || 'Login failed');
     }
   } catch (error) {
     toast.error(error.response?.data?.message || error.message || "Login failed");
+    setAuthState({
+      isLoggedin: false,
+      userData: null,
+      isLoading: false
+    });
+    setUserData(null)
   }
 }
 
