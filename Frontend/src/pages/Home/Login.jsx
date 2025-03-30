@@ -22,11 +22,13 @@ const Login = () => {
 
   console.log("UserData Login Page : ", userData)
 
-  async function onFormSubmit(e) {
+ async function onFormSubmit(e) {
   e.preventDefault();
-  
+  console.log('Login form submitted');
+
   try {
-        const { data } = await axios.post(
+    console.log('Making login request...');
+    const { data } = await axios.post(
       `${backendUrl}/api/auth/login`,
       { email, password },
       { 
@@ -38,28 +40,28 @@ const Login = () => {
       }
     );
 
-    if (!data.success) {
+    console.log('Login response:', data);
+
+    if (data.success) {
+      toast.success(data.message);
+      console.log('Login successful, updating state');
+      
+      // Update state immediately with received data
+      setAuthState({
+        isLoggedin: true,
+        userData: data.userDetails,
+        isLoading: false
+      });
+      setUserData(data.userDetails)
+
+      console.log('State updated, navigating to dashboard');
+      navigate("/user/dashboard");
+      
+    } else {
       throw new Error(data.message || 'Login failed');
     }
-
-    toast.success(data.message);
-    
-    // 2. Update state immediately with received data
-    setAuthState({
-      isLoggedin: true,
-      userData: data.userDetails, // Ensure backend sends this
-      isLoading: false
-    });
-
-    setUserData(data.userDetails)
-
-    // 3. Add slight delay for cookie to be set
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    // 4. Verify session using the ProtectedRoute's logic
-    navigate("/user/dashboard"); 
-    
   } catch (error) {
+    console.error('Login error:', error);
     toast.error(error.response?.data?.message || error.message || "Login failed");
     setAuthState({
       isLoggedin: false,
