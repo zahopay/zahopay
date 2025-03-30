@@ -30,7 +30,6 @@ const ProtectedRoute = () => {
           }
         });
 
-        console.log('Auth response:', data);
         
         if (isMounted) {
           if (data?.isAuthenticated) {
