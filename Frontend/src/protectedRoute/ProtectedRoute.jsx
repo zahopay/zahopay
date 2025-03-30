@@ -23,9 +23,7 @@ const ProtectedRoute = () => {
     const verifyAuth = async () => {
       try {
         console.log('Making is-auth request to:', `${backendUrl}/api/auth/is-auth`);
-        const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
-          withCredentials: true,}
-        });
+        const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {withCredentials: true});
 
         
         if (isMounted) {
