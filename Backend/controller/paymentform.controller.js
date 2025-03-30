@@ -23,7 +23,7 @@ export const addNewPaymentForm = async (req, res) => {
     }
 
     const host = req.get("host");
-    const protocol = req.protocol;
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
 
     const logoImage = req.file
   ? `${protocol}://${host}/uploads/paymentform/logo/${req.file.filename}`
