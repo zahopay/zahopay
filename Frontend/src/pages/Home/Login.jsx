@@ -17,6 +17,8 @@ const Login = () => {
     isLoggedin,
     setIsLoggedin,
     verifyAuth,
+    setAuthState,
+    authState
   } = useContext(AppContext);
 
   async function onFormSubmit(e) {
