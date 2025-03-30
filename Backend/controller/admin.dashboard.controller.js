@@ -193,24 +193,38 @@ export const fetchAllPurchase = async (req, res) =>{
 
 export const fetchAllUserPlanPayment = async(req, res) => {
   try {
-
-
     const allPlanPayments = await planVerificationModel.aggregate([
       {
+        $match: {
+          userId: { $exists: true, $ne: null }
+        }
+      },
+      {
         $addFields: {
-          userIdObject: { $toObjectId: "$userId" },
-        },
+          userIdObject: {
+            $cond: {
+              if: { $regexMatch: { input: "$userId", regex: /^[0-9a-fA-F]{24}$/ } },
+              then: { $toObjectId: "$userId" },
+              else: null
+            }
+          }
+        }
+      },
+      {
+        $match: {
+          userIdObject: { $ne: null }
+        }
       },
       {
         $lookup: {
           from: "users",
           localField: "userIdObject",
           foreignField: "_id",
-          as: "userDetails",
-        },
+          as: "userDetails"
+        }
       },
       { $unwind: "$userDetails" },
-      { $sort: { createdAt: -1 } },
+      { $sort: { createdAt: -1 } }
     ]);
 
     return res.json({ success: true, allPlanPayments });
@@ -218,7 +232,6 @@ export const fetchAllUserPlanPayment = async(req, res) => {
     return res.json({ success: false, message: error.message });
   }
 }
-
 //change user plan status
 
 export const changeUserPlanStatus = async(req, res) => {
