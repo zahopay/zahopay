@@ -251,6 +251,8 @@ export const isAuthenticted = async (req, res) => {
 export const isAuth = async (req, res) => {
   try {
     const token = req.cookies.accessid; 
+
+     console.log('Received cookies:', req.cookies);
     
     if (!token) {
       return res.json({ success: false });
