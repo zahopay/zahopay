@@ -244,6 +244,7 @@ export const isAuthenticted = async (req, res) => {
       message: error.message
     });
   }
+}
 
 
 // Add this endpoint (fix your isAuthenticated typo)
