@@ -5,66 +5,58 @@ import {motion} from "framer-motion"
 
 
 const ProtectedRoute = () => {
-  const { setUserData, authState, setAuthState, backendUrl } = useContext(AppContext);
+const { setUserData, setAuthState, backendUrl } = useContext(AppContext);
   const [authChecked, setAuthChecked] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+        // First check if authenticated
+        const authResponse = await axios.get(`${backendUrl}/api/auth/is-auth`, {
           withCredentials: true,
         });
 
-        if (response.data.success) {
-          try {
-            const userDataResponse = await axios.get(
-              `${backendUrl}/api/user/data`,
-              { withCredentials: true }
-            );
+        if (authResponse.data.success) {
+          // Then get user data
+          const userDataResponse = await axios.get(`${backendUrl}/api/user/data`, {
+            withCredentials: true,
+          });
 
-            if (userDataResponse.data.success) {
-              setAuthState({
-                isLoggedin: true,
-                isLoading: false,
-                userData: userDataResponse.data.userDetials,
-              });
-              setUserData(userDataResponse.data.userDetials);
-            } else {
-              setAuthState({ ...authState, isLoading: false });
-              navigate("/login");
-            }
-          } catch (userDataError) {
-            setAuthState({ ...authState, isLoading: false });
-            navigate("/login");
+          if (userDataResponse.data.success) {
+            setAuthState({
+              isLoggedin: true,
+              isLoading: false,
+              userData: userDataResponse.data.userDetails, // Fixed typo here
+            });
+            setUserData(userDataResponse.data.userDetails); // Fixed typo here
+          } else {
+            throw new Error("Failed to get user data");
           }
         } else {
-          setAuthState({ ...authState, isLoading: false });
-          navigate("/login");
+          throw new Error("Not authenticated");
         }
       } catch (error) {
-        setAuthState({ ...authState, isLoading: false });
+        setAuthState({
+          isLoggedin: false,
+          isLoading: false,
+          userData: null,
+        });
+        setUserData(null);
         navigate("/login");
+      } finally {
+        setAuthChecked(true);
       }
-      setAuthChecked(true);
     };
 
     checkAuth();
-  }, [navigate, backendUrl, setAuthState, setUserData, authState]);
+  }, [navigate, backendUrl, setAuthState, setUserData]);
 
   if (!authChecked) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="min-h-screen min-w-full bg-white flex items-center justify-center"
-      >
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="h-12 w-12 border-t-4 border-b-4 border-purple-500 rounded-full"
-        ></motion.div>
-      </motion.div>
+      <div className="min-h-screen min-w-full bg-white flex items-center justify-center">
+        <div className="h-12 w-12 border-t-4 border-b-4 border-purple-500 rounded-full animate-spin"></div>
+      </div>
     );
   }
 
