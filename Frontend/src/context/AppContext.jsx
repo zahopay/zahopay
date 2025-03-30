@@ -46,11 +46,14 @@ export const AppContextProvider = ({ children }) => {
             userData: data.userDetails,
             isLoading: false,
           })
+          return true
         } else {
             toast.error(data.message);
+          return false
         }
         } catch (error) {
         toast.error(error.message);
+          return false
         }
     };
 
@@ -63,12 +66,16 @@ export const AppContextProvider = ({ children }) => {
         });
 
         if (response.data.success) {
-            await getUserData()
+           const isAuth = await getUserData()
+          if(isAuth){
+            return true
+          }
         } else {
-            return { success: false };
+          return false
         }
     } catch (error) {
-        return { success: false };
+          console.log(error.message);
+          return false
     }
 };
 
