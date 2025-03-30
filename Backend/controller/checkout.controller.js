@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import paymentFormModel from "../model/paymentForm.model.js";
 import purchaseModel from "../model/purchase.model.js";
-import e from "express";
+import express from "express";
 import userModel from "../model/user.model.js";
 
 
