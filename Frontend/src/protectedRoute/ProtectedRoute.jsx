@@ -5,40 +5,56 @@ import {motion} from "framer-motion"
 
 
 const ProtectedRoute = () => {
-  const { userData, authState, setAuthState , verifyAuth, backendUrl } = useContext(AppContext);
-
+  const { setUserData, authState, setAuthState, backendUrl } = useContext(AppContext);
   const [authChecked, setAuthChecked] = useState(false);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const response = await axios.get(
-                    `${backendUrl}/api/auth/is-auth`,
-                    { withCredentials: true }
-                );
+  useEffect(() => {
+    const checkAuth = async () => {
+      setAuthState((prevState) => ({ ...prevState, isLoading: true })); // Set loading to true
+      try {
+        const response = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+          withCredentials: true,
+        });
 
-                if (response.data.success) {
-                    setAuthState({
-                        isLoggedin: true,
-                        userData: response.data.userDetails,
-                        isLoading: false,
-                    });
-                  await verifyAuth()
-                } else {
-                    navigate('/login');
-                }
-            } catch (error) {
-                navigate('/login');
+        if (response.data.success) {
+          try {
+            const userDataResponse = await axios.get(
+              `${backendUrl}/api/user/data`,
+              { withCredentials: true }
+            );
+
+            if (userDataResponse.data.success) {
+              setAuthState({
+                isLoggedin: true,
+                isLoading: false,
+                userData: userDataResponse.data.userDetials,
+              });
+              setUserData(userDataResponse.data.userDetials);
+            } else {
+              setAuthState({ ...authState, isLoading: false });
+              navigate("/login");
             }
-            setAuthChecked(true);
-        };
+          } catch (userDataError) {
+            setAuthState({ ...authState, isLoading: false });
+            navigate("/login");
+          }
+        } else {
+          setAuthState({ ...authState, isLoading: false });
+          navigate("/login");
+        }
+      } catch (error) {
+        setAuthState({ ...authState, isLoading: false });
+        navigate("/login");
+      }
+      setAuthChecked(true);
+    };
 
-        checkAuth();
-    }, [navigate, backendUrl, setAuthState]);
+    checkAuth();
+  }, [navigate, backendUrl, setAuthState, setUserData, authState]);
 
-if (!authChecked) {
-  return  (
+  if (!authChecked) {
+    return (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -51,11 +67,9 @@ if (!authChecked) {
         ></motion.div>
       </motion.div>
     );
-}
+  }
 
-return authState.isLoggedin ? <Outlet /> : <Navigate to="/login" replace />;
-
-
+  return authState.isLoggedin ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;
