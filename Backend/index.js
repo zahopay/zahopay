@@ -40,7 +40,14 @@ const corsOptions = {
         'https://zahopay-frontend.onrender.com'
     ],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+    'Cache-Control',
+    'Pragma'
+  ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     preflightContinue: false,
     optionsSuccessStatus: 204
