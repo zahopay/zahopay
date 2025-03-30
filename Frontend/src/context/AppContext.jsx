@@ -49,9 +49,19 @@ export const AppContextProvider = ({ children }) => {
           return true
         } else {
             toast.error(data.message);
+           setAuthState({
+            isLoggedin: false,
+            userData: null,
+            isLoading: false,
+          })
           return false
         }
         } catch (error) {
+            setAuthState({
+            isLoggedin: false,
+            userData: null,
+            isLoading: false,
+          })
         toast.error(error.message);
           return false
         }
