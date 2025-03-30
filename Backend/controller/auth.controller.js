@@ -233,8 +233,19 @@ export const isAuthenticted = async (req, res) => {
     
     return res.status(200).json({
       success: true,
-      isAuthenticated: true,  // Explicit flag
-      userDetails: user,      // Full user details
+      isAuthenticated: true,  
+      userDetails: {
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        isAccountVerified: user.isAccountVerified,
+        userEarnings: user.userEarnings,
+        totalSales: user.totalSales,
+        userPlan: user.userPlan,
+        createdAt: user.createdAt,
+        userId: user._id,
+        userPlanExpire: user.userPlanExpire,
+      },    // Full user details
       message: "Authenticated"
     });
     
