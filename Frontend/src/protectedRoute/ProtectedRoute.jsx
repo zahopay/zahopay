@@ -24,11 +24,7 @@ const ProtectedRoute = () => {
       try {
         console.log('Making is-auth request to:', `${backendUrl}/api/auth/is-auth`);
         const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
-          withCredentials: true,
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          }
+          withCredentials: true,}
         });
 
         
