@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import {motion} from "framer-motion"
+import axios from "axios"
 
 
 
