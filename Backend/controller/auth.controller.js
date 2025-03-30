@@ -242,7 +242,7 @@ export const isAuth = async (req, res) => {
 
 
     if (!user) {
-      return res.json({ success: false });
+      return res.json({ success: false , message : "Login Again"});
     }
 
     return res.json({
