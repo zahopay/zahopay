@@ -31,9 +31,10 @@ const userAuth = async (req, res, next) => {
       });
     }
 
-    req.userId = user._id; 
+    req.body.userId = decoded.id
     
     next();
+    
   } catch (error) {
     console.error('Token verification failed:', error.message);
     
