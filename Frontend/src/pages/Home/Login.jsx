@@ -14,7 +14,6 @@ const Login = () => {
     backendUrl,
     userData,
     setUserData,
-    isLoggedin,
     setIsLoggedin,
     verifyAuth,
     setAuthState,
@@ -27,8 +26,9 @@ const Login = () => {
     const { data } = await axios.post(
       `${backendUrl}/api/auth/login`,
       { email, password },
-      { withCredentials: true, 
-       headers: { 
+      { 
+        withCredentials: true,
+        headers: { 
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         } 
@@ -36,8 +36,30 @@ const Login = () => {
     );
 
     if (data.success) {
+      // Immediately update state with user data
+      setAuthState({
+        isLoggedin: true,
+        userData: data.userDetails,
+        isLoading: false
+      });
+      setUserData(data.userDetails);
+      
       toast.success(data.message);
-      navigate("/user/dashboard");
+      
+      // Verify auth before navigation
+      try {
+        const authResponse = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+          withCredentials: true
+        });
+        
+        if (authResponse.data.success) {
+          navigate("/user/dashboard");
+        } else {
+          throw new Error('Verification failed');
+        }
+      } catch (verifyError) {
+        toast.error('Session verification failed');
+      }
     } else {
       toast.error(data.message);
     }
