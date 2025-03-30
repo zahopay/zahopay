@@ -54,6 +54,7 @@ export const AppContextProvider = ({ children }) => {
             userData: null,
             isLoading: false,
           })
+          setUserData(null);
           return false
         }
         } catch (error) {
@@ -62,6 +63,7 @@ export const AppContextProvider = ({ children }) => {
             userData: null,
             isLoading: false,
           })
+          setUserData(null);
         toast.error(error.message);
           return false
         }
