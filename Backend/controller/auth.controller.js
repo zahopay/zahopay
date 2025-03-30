@@ -219,7 +219,6 @@ export const isAuthenticted = async (req, res) => {
  try {
     const { userId } = req.body;
 
-   console.log("User ID In Auth Controler : ", userId)
 
     if (!userId) {
       return res.status(401).json({ 
