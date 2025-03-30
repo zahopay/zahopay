@@ -11,7 +11,6 @@ const ProtectedRoute = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      setAuthState((prevState) => ({ ...prevState, isLoading: true })); // Set loading to true
       try {
         const response = await axios.get(`${backendUrl}/api/auth/is-auth`, {
           withCredentials: true,
