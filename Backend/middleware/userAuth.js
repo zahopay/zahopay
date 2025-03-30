@@ -4,6 +4,8 @@ const userAuth = async (req, res, next) => {
   
   const token = req.cookies.accessid;
 
+  console.log("Middle ware token", token)
+
   if (!token) {
     return res.json({
       success: false,
@@ -13,6 +15,10 @@ const userAuth = async (req, res, next) => {
 
   try {
     const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log("Middle ware tokenDecoded", tokenDecoded)
+
+    console.log("Middle ware tokenDecoded ID", tokenDecoded.id)
 
 
     if (tokenDecoded.id) {
