@@ -14,27 +14,26 @@ const ProtectedRoute = () => {
    console.log("userData Protected Route : ", userData)
 
   useEffect(() => {
-    let isMounted = true; // Track mounted state
+    let isMounted = true;
 
-    const verifyAuth = async () => {
+    const verifySession = async () => {
       try {
-        const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          }
-        });
+        const { data } = await axios.get(
+          `${backendUrl}/api/auth/is-auth`,
+          { withCredentials: true }
+        );
 
-        if (isMounted && data?.success && data.isAuthenticated) {
-          setAuthState({
-            isLoggedin: true,
-            userData: data.userDetails,
-            isLoading: false
-          });
-          setUserData(data.userDetails)
-        } else {
-          throw new Error(data?.message || 'Not authenticated');
+        if (isMounted) {
+          if (data?.isAuthenticated) {
+            setAuthState({
+              isLoggedin: true,
+              userData: data.userDetails,
+              isLoading: false
+            });
+            setUserData(data.userDetails)
+          } else {
+            throw new Error(data?.message || 'Not authenticated');
+          }
         }
       } catch (error) {
         if (isMounted) {
@@ -51,9 +50,9 @@ const ProtectedRoute = () => {
       }
     };
 
-    verifyAuth();
+    verifySession();
 
-    return () => { isMounted = false }; 
+    return () => { isMounted = false };
   }, [navigate, backendUrl, setAuthState]);
 
   if (!authChecked) {
