@@ -13,6 +13,7 @@ const { setUserData, setAuthState, backendUrl,authState } = useContext(AppContex
    useEffect(() => {
         const checkAuth = async () => {
             try {
+              setAuthChecked(false);
                 const response = await axios.get(
                     `${backendUrl}/api/auth/is-auth`,
                     { withCredentials: true }
