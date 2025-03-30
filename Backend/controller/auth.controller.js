@@ -219,7 +219,7 @@ export const isAuthenticted = async (req, res) => {
   try {
     const { userId } = req.body;
 
-    const user = await userModel.findById(userId);
+    const user = await userModel.findById(userId).select('-password');
 
     return res.json({ success: true, userDetails: user });
   } catch (error) {
