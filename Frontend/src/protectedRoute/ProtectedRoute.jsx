@@ -53,6 +53,6 @@ const { setUserData, setAuthState, backendUrl,authState } = useContext(AppContex
             </motion.div>
         );
     }
-    return authState.isLoggedin ? <Outlet /> : <Navigate to="/register" replace />;
+    return authState.isLoggedin ? <Outlet /> : <Navigate to="/login" replace />;
 };
 export default ProtectedRoute;
