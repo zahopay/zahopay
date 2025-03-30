@@ -3,7 +3,6 @@ import userModel from "../model/user.model.js";
 
 const userAuth = async (req, res, next) => {
   
-  console.log('Incoming cookies:', req.cookies); // Debug
   
   const token = req.cookies.accessid;
   
@@ -18,7 +17,7 @@ const userAuth = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Decoded token:', decoded); // Debug
+
     
     // Verify user exists
     const user = await userModel.findById(decoded.id);
