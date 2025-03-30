@@ -88,7 +88,9 @@ const AddPaymentForm = () => {
       formData.append("upiId", upiId);
       formData.append("redirectUrl", redirectUrl);
       formData.append("facebookPixel", facebookPixel);
-      formData.append("userId", userData?.userId);
+      formData.append("userId", userData?._id);
+
+      console.log("userData  : ", userData)
 
       if (logoFile) {
         formData.append("logoImage", logoFile);
