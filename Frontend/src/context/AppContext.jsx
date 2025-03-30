@@ -53,7 +53,7 @@ export const AppContextProvider = ({ children }) => {
 
   const verifyAuth = async () => {
         try {
-        const response = await axios.get(`${backendUrl}/api/auth/is-auth"`, {
+        const response = await axios.get(`${backendUrl}/api/auth/is-auth`, {
             withCredentials: true,
         });
 
