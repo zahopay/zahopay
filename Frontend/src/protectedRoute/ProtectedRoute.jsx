@@ -4,6 +4,7 @@ import AppContext from "../context/AppContext";
 import {motion} from "framer-motion"
 
 
+
 const ProtectedRoute = () => {
 const { setUserData, setAuthState, backendUrl,authState } = useContext(AppContext);
   const [authChecked, setAuthChecked] = useState(false);
