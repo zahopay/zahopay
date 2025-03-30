@@ -13,6 +13,10 @@ const ProtectedRoute = () => {
 
    console.log("userData Protected Route : ", userData)
 
+  console.log('Login response:', data);
+console.log('Cookie after login:', document.cookie);
+console.log('Auth state after update:', authState);
+
   useEffect(() => {
     let isMounted = true;
 
