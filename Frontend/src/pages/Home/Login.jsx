@@ -20,6 +20,8 @@ const Login = () => {
     authState
   } = useContext(AppContext);
 
+  console.log("UserData Login Page : ", userData)
+
   async function onFormSubmit(e) {
   try {
     e.preventDefault();
