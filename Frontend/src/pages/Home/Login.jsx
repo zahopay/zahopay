@@ -40,8 +40,6 @@ const Login = () => {
       }
     );
 
-    console.log('Login response:', data);
-
     if (data.success) {
       toast.success(data.message);
       console.log('Login successful, updating state');
