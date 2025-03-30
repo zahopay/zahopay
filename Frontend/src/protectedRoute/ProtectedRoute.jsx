@@ -17,7 +17,6 @@ const ProtectedRoute = () => {
   useEffect(() => {
     const verifyAuth = async () => {
       try {
-        console.log('Current cookies:', document.cookie); 
         
         const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
           withCredentials: true,
