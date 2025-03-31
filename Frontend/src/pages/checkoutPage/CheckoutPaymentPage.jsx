@@ -547,7 +547,6 @@ const PaymentCheckout = ({ paymentForm }) => {
                       { name: "Paytm", icon: assets.paytmPaymentForm },
                       { name: "WhatsApp", icon: assets.whatsappPaymentForm },
                       { name: "BHIM UPI", icon: assets.UpiPaymentLogo },
-                      { name: "Other UPI Apps", icon: assets.upiLogoGeneric },
                     ].map((app, index) => (
                       <motion.div
                         key={index}
