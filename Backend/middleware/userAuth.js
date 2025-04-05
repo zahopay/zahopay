@@ -38,7 +38,7 @@ const userAuth = async (req, res, next) => {
     console.error('Token verification failed:', error.message);
     
     res.clearCookie("accessid", {
-      domain: ".zahopay.in",
+     domain: ".zahopay.site",
       path: "/",
     });
     
