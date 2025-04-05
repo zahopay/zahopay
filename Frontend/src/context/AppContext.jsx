@@ -7,8 +7,8 @@ const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
 
-  const backendUrl = "https://api.zahopay.in"
-  const frontendUrl = "https://zahopay.in";
+  const backendUrl = "https://api.zahopay.site"
+  const frontendUrl = "https://zahopay.site";
 
 
   const [isLoggedin, setIsLoggedin] = useState(false);
