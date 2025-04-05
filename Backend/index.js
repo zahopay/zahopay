@@ -33,12 +33,19 @@ app.use(cookieParser());
 
 
 const corsOptions = {
+    // origin: [
+    //     'https://zahopay-frontend.onrender.com',
+    //     'https://zahopay.in',
+    //     'https://zahopay.onrender.com',
+    //     'https://zahopay-frontend.onrender.com',
+    //     'https://api.zahopay.in'
+    // ],
     origin: [
         'https://zahopay-frontend.onrender.com',
-        'https://zahopay.in',
+        'https://zahopay.site',
         'https://zahopay.onrender.com',
         'https://zahopay-frontend.onrender.com',
-        'https://api.zahopay.in'
+        'https://api.zahopay.site'
     ],
     credentials: true,
     allowedHeaders: [
