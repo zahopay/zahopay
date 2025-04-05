@@ -129,7 +129,7 @@ const ContactUs = () => {
                   </div>
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-purple-200">support@zahopay.com</p>
+                    <p className="text-purple-200">zahopay@gmail.com</p>
                   </div>
                 </div>
 
