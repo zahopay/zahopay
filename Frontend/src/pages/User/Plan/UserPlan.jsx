@@ -13,7 +13,6 @@ import {
   FiExternalLink,
   FiArrowRight,
 } from "react-icons/fi";
-import { FaPaypal } from "react-icons/fa";
 
 const UserPlan = () => {
   const { backendUrl, userData } = useContext(AppContext);
@@ -107,14 +106,13 @@ const UserPlan = () => {
   };
 
   const handleInitiatePayment = () => {
-    window.open(selectedPlan.link, "_blank");
     setActiveState("payment-success");
   };
 
   const handlePaymentSubmit = async () => {
     if (!transactionId || !paymentScreenshot) {
       return toast.error(
-        "Please provide transaction ID and payment screenshot"
+        "Please provide reference number and payment screenshot"
       );
     }
 
@@ -171,7 +169,6 @@ const plans = [
       "1 Checkout Theme",
     ],
     bestValue: false,
-    link: "https://www.paypal.com/ncp/payment/PEHVTSYNYW8DY",
   },
   {
     name: "Enterprise",
@@ -187,7 +184,6 @@ const plans = [
       "Abandand Whatsapp Message",
     ],
     bestValue: false,
-    link: "https://www.paypal.com/ncp/payment/ZPY6FLG7KFMT2",
   },
   {
     name: "Individual Plus",
@@ -201,7 +197,6 @@ const plans = [
       "1 Checkout Theme",
     ],
     bestValue: true,
-    link: "https://www.paypal.com/ncp/payment/ATB7PZL2TLUD8",
   },
   {
     name: "Enterprise Plus",
@@ -217,7 +212,6 @@ const plans = [
       "Abandand Whatsapp Message",
     ],
     bestValue: true,
-    link: "https://www.paypal.com/ncp/payment/4536MDXP6E2H2",
   },
 ];
 
@@ -336,9 +330,19 @@ const plans = [
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Payment Method:</span>
-                        <span className="font-semibold flex items-center">
-                          <FaPaypal className="text-blue-500 mr-1" /> PayPal
+                        <span className="font-semibold">
+                          Bank Transfer
                         </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-100 p-4 mb-6 rounded-lg">
+                      <h3 className="font-medium mb-2">Bank Details:</h3>
+                      <div className="space-y-2 text-sm">
+                        <p><span className="font-medium">Account Number:</span> [Your account number]</p>
+                        <p><span className="font-medium">IFSC Code:</span> HDFC0002064</p>
+                        <p><span className="font-medium">Account Name:</span> [Your account name]</p>
+                        <p><span className="font-medium">Bank Name:</span> HDFC Bank</p>
                       </div>
                     </div>
 
@@ -363,7 +367,7 @@ const plans = [
                         onClick={handleInitiatePayment}
                         className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center transition"
                       >
-                        <FaPaypal className="mr-2 text-xl" /> Pay with PayPal
+                        Proceed to Payment
                       </button>
                     </div>
                   </motion.div>
@@ -387,12 +391,12 @@ const plans = [
                           htmlFor="transactionId"
                           className="block text-sm font-medium text-gray-700 mb-1"
                         >
-                          Transaction ID
+                          Reference Number
                         </label>
                         <input
                           type="text"
                           id="transactionId"
-                          placeholder="Enter PayPal Transaction ID"
+                          placeholder="Enter Bank Transfer Reference Number"
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                           value={transactionId}
                           onChange={(e) => setTransactionId(e.target.value)}
