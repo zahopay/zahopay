@@ -86,7 +86,7 @@ const NotFoundPage = () => {
             <p className="text-gray-600 mb-3">Need help?</p>
             <motion.a
               whileHover={{ scale: 1.02 }}
-              href="mailto:support@zahopay.com"
+              href="mailto:zahopay@gmail.com"
               className="inline-flex items-center px-4 py-2 bg-gray-100 rounded-lg text-gray-800 hover:bg-gray-200 transition"
             >
               <FiMail className="mr-2" />
