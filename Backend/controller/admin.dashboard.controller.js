@@ -48,7 +48,7 @@ export const AdminLogin = async (req, res) => {
       secure: true,
       sameSite: 'none', // MUST BE 'none' for cross-site
       maxAge: 8 * 60 * 60 * 1000, // 8 hours
-      domain: '.zahopay.in', // LEADING DOT IS CRUCIAL
+      domain: ".zahopay.site",
       path: "/",
       partitioned: true 
     });
@@ -90,7 +90,7 @@ export const verifyAdmin = async (req, res) => {
 
 
 export const adminLogout = (req, res) => {
-    res.clearCookie("admin_token", { path: "/" , domain :  '.zahopay.in',});
+    res.clearCookie("admin_token", { path: "/" , domain: ".zahopay.site",});
   res.json({ success: true, message: "Logged out" });
 };
 
