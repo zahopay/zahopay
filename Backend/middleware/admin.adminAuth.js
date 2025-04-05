@@ -18,7 +18,7 @@ const adminAuth = (req, res, next) => {
     } catch (error) {
         console.error("JWT verification failed:", error); // Log the error object
         res.clearCookie("admin_token", {
-            domain: ".zahopay.in",
+            domain: ".zahopay.site",
             path: "/",
         });
         return res.status(401).json({
