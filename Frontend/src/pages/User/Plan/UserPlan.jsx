@@ -339,9 +339,8 @@ const plans = [
                     <div className="bg-gray-100 p-4 mb-6 rounded-lg">
                       <h3 className="font-medium mb-2">Bank Details:</h3>
                       <div className="space-y-2 text-sm">
-                        <p><span className="font-medium">Account Number:</span> [Your account number]</p>
+                        <p><span className="font-medium">Account Number:</span> 50100653695547</p>
                         <p><span className="font-medium">IFSC Code:</span> HDFC0002064</p>
-                        <p><span className="font-medium">Account Name:</span> [Your account name]</p>
                         <p><span className="font-medium">Bank Name:</span> HDFC Bank</p>
                       </div>
                     </div>
