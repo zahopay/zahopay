@@ -435,10 +435,10 @@ const plans = [
                         <p className="text-sm text-blue-700">
                           Need help? Contact us at{" "}
                           <a
-                            href="mailto:support@zahopay.com"
+                            href="mailto:zahopay@gmail.com"
                             className="font-semibold hover:underline"
                           >
-                            support@zahopay.com
+                            zahopay@gmail.com
                           </a>
                         </p>
                       </div>
@@ -494,10 +494,10 @@ const plans = [
                       <p className="text-sm text-blue-700">
                         For any queries, email us at{" "}
                         <a
-                          href="mailto:support@zahopay.com"
+                          href="mailto:zahopay@gmail.com"
                           className="font-semibold hover:underline"
                         >
-                          support@zahopay.com
+                          zahopay@gmail.com
                         </a>
                       </p>
                     </div>
